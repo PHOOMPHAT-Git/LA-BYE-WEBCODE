@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage - Portfolio</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/components/scrollbar.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="/js/security.js" defer></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="nav-logo">Portfolio</a>
+            <button class="nav-hamburger" onclick="this.classList.toggle('active');document.querySelector('.nav-menu-mobile').classList.toggle('open');document.body.classList.toggle('menu-open')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-menu nav-menu-desktop">
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                </ul>
+                <div class="nav-divider"></div>
+                <ul class="nav-links nav-auth">
+                    <li class="user-dropdown">
+                        <button class="user-dropdown-btn" onclick="this.parentElement.classList.toggle('open')">
+                            <%= user.username %>
+                            <svg class="dropdown-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="user-dropdown-menu">
+                            <a href="/manage">Manage</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="nav-menu nav-menu-mobile">
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+        </ul>
+        <div class="nav-divider"></div>
+        <ul class="nav-links nav-auth">
+            <li><a href="/manage">Manage</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="manage-page">
+        <div class="container">
+            <h1 class="manage-title">Manage Projects</h1>
+
+            <!-- Dashboard -->
+            <div class="manage-card dashboard-section">
+                <div class="dashboard-header">
+                    <h2 class="manage-card-title">Dashboard</h2>
+                    <div class="dashboard-date-picker">
+                        <input type="date" id="dashboardDate" value="<%= new Date().toISOString().slice(0, 10) %>">
+                        <button type="button" class="dashboard-date-reset" id="dashboardDateReset" title="Back to overall">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </div>
+                        <div class="stat-value" id="statVisits"><%= totalVisits %></div>
+                        <div class="stat-label" id="statVisitsLabel">Visits</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="stat-value" id="statToday"><%= todayVisits %></div>
+                        <div class="stat-label">Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="stat-value" id="statUsers"><%= totalUsers %></div>
+                        <div class="stat-label" id="statUsersLabel">Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <div class="stat-value" id="statProjects"><%= projects.length %></div>
+                        <div class="stat-label" id="statProjectsLabel">Projects</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-chart">
+                    <div class="chart-header">
+                        <span class="chart-title">Visitors</span>
+                        <div class="chart-controls">
+                            <button type="button" class="chart-range-btn" data-days="3">3 Days</button>
+                            <button type="button" class="chart-range-btn active" data-days="7">7 Days</button>
+                            <button type="button" class="chart-range-btn" data-days="30">30 Days</button>
+                        </div>
+                    </div>
+                    <canvas id="visitChart" width="900" height="280"></canvas>
+                </div>
+            </div>
+
+            <!-- Add Project Form -->
+            <div class="manage-card">
+                <h2 class="manage-card-title">Add New Project</h2>
+                <form action="/manage/add" method="POST" class="manage-form">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" placeholder="Project name">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Brief description of the project" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <div class="tag-selector" id="addTagSelector">
+                            <div class="tag-group">
+                                <span class="tag-group-label">Code</span>
+                                <div class="tag-group-options">
+                                    <button type="button" class="tag-option" data-tag="JavaScript" onclick="toggleTag(this)">JavaScript</button>
+                                    <button type="button" class="tag-option" data-tag="HTML" onclick="toggleTag(this)">HTML</button>
+                                    <button type="button" class="tag-option" data-tag="CSS" onclick="toggleTag(this)">CSS</button>
+                                    <button type="button" class="tag-option" data-tag="Node.js" onclick="toggleTag(this)">Node.js</button>
+                                    <button type="button" class="tag-option" data-tag="Express" onclick="toggleTag(this)">Express</button>
+                                    <button type="button" class="tag-option" data-tag="EJS" onclick="toggleTag(this)">EJS</button>
+                                    <button type="button" class="tag-option" data-tag="React" onclick="toggleTag(this)">React</button>
+                                    <button type="button" class="tag-option" data-tag="Python" onclick="toggleTag(this)">Python</button>
+                                    <button type="button" class="tag-option" data-tag="Lua" onclick="toggleTag(this)">Lua</button>
+                                    <button type="button" class="tag-option" data-tag="Discord.js" onclick="toggleTag(this)">Discord.js</button>
+                                    <button type="button" class="tag-option" data-tag="API" onclick="toggleTag(this)">API</button>
+                                    <button type="button" class="tag-option" data-tag="Full Stack" onclick="toggleTag(this)">Full Stack</button>
+                                </div>
+                            </div>
+                            <div class="tag-group">
+                                <span class="tag-group-label">Database</span>
+                                <div class="tag-group-options">
+                                    <button type="button" class="tag-option" data-tag="MongoDB" onclick="toggleTag(this)">MongoDB</button>
+                                    <button type="button" class="tag-option" data-tag="MySQL" onclick="toggleTag(this)">MySQL</button>
+                                    <button type="button" class="tag-option" data-tag="Firebase" onclick="toggleTag(this)">Firebase</button>
+                                </div>
+                            </div>
+                            <div class="tag-group">
+                                <span class="tag-group-label">Hosting</span>
+                                <div class="tag-group-options">
+                                    <button type="button" class="tag-option" data-tag="Railway" onclick="toggleTag(this)">Railway</button>
+                                    <button type="button" class="tag-option" data-tag="Vercel" onclick="toggleTag(this)">Vercel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo">Live Demo URL</label>
+                        <input type="text" id="demo" name="demo" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn btn-primary manage-btn">Add Project</button>
+                </form>
+            </div>
+
+            <!-- Project List -->
+            <div class="manage-card">
+                <h2 class="manage-card-title">All Projects ( <%= projects.length %> )</h2>
+                <% if (projects.length === 0) { %>
+                    <p class="manage-empty">No projects yet. Add your first project above.</p>
+                <% } else { %>
+                    <div class="manage-list">
+                        <% projects.forEach((project, index) => { %>
+                            <div class="manage-item" data-id="<%= project._id %>">
+                                <div class="manage-item-drag" role="button" tabindex="-1" title="Drag to reorder">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+                                </div>
+                                <div class="manage-item-info">
+                                    <h3 class="manage-item-title"><%= project.title %></h3>
+                                    <p class="manage-item-desc"><%= project.description %></p>
+                                    <% if (project.tags && project.tags.length > 0) { %>
+                                        <div class="project-tags">
+                                            <% project.tags.forEach(tag => { %>
+                                                <span class="tag"><%= tag %></span>
+                                            <% }) %>
+                                        </div>
+                                    <% } %>
+                                    <div class="manage-item-dates">
+                                        <span>Created : <%= new Date(project.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
+                                        <% if (project.updated_at && project.updated_at.getTime() !== project.created_at.getTime()) { %>
+                                            <span>Updated : <%= new Date(project.updated_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="manage-item-actions">
+                                    <button type="button" class="manage-edit-btn" onclick="openEdit('<%= project._id %>', '<%= project.title.replace(/'/g, "\\'") %>', `<%= project.description.replace(/`/g, "\\`") %>`, '<%= project.tags.join(",") %>', '<%= project.demo %>')">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    </button>
+                                    <button type="button" class="manage-delete-btn" onclick="openDelete('<%= project._id %>', '<%= project.title.replace(/'/g, "\\'") %>')">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="edit-modal" id="editModal">
+        <div class="edit-modal-overlay" onclick="closeEdit()"></div>
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h2 class="manage-card-title">Edit Project</h2>
+                <button type="button" class="edit-modal-close" onclick="closeEdit()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="editForm" method="POST" class="manage-form">
+                <div class="form-group">
+                    <label for="editTitle">Title</label>
+                    <input type="text" id="editTitle" name="title" placeholder="Project name">
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" name="description" placeholder="Brief description of the project" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div class="tag-selector" id="editTagSelector">
+                        <div class="tag-group">
+                            <span class="tag-group-label">Code</span>
+                            <div class="tag-group-options">
+                                <button type="button" class="tag-option" data-tag="JavaScript" onclick="toggleTag(this)">JavaScript</button>
+                                <button type="button" class="tag-option" data-tag="HTML" onclick="toggleTag(this)">HTML</button>
+                                <button type="button" class="tag-option" data-tag="CSS" onclick="toggleTag(this)">CSS</button>
+                                <button type="button" class="tag-option" data-tag="Node.js" onclick="toggleTag(this)">Node.js</button>
+                                <button type="button" class="tag-option" data-tag="Express" onclick="toggleTag(this)">Express</button>
+                                <button type="button" class="tag-option" data-tag="EJS" onclick="toggleTag(this)">EJS</button>
+                                <button type="button" class="tag-option" data-tag="React" onclick="toggleTag(this)">React</button>
+                                <button type="button" class="tag-option" data-tag="Python" onclick="toggleTag(this)">Python</button>
+                                <button type="button" class="tag-option" data-tag="Lua" onclick="toggleTag(this)">Lua</button>
+                                <button type="button" class="tag-option" data-tag="Discord.js" onclick="toggleTag(this)">Discord.js</button>
+                                <button type="button" class="tag-option" data-tag="API" onclick="toggleTag(this)">API</button>
+                                <button type="button" class="tag-option" data-tag="Full Stack" onclick="toggleTag(this)">Full Stack</button>
+                            </div>
+                        </div>
+                        <div class="tag-group">
+                            <span class="tag-group-label">Database</span>
+                            <div class="tag-group-options">
+                                <button type="button" class="tag-option" data-tag="MongoDB" onclick="toggleTag(this)">MongoDB</button>
+                                <button type="button" class="tag-option" data-tag="MySQL" onclick="toggleTag(this)">MySQL</button>
+                                <button type="button" class="tag-option" data-tag="Firebase" onclick="toggleTag(this)">Firebase</button>
+                            </div>
+                        </div>
+                        <div class="tag-group">
+                            <span class="tag-group-label">Hosting</span>
+                            <div class="tag-group-options">
+                                <button type="button" class="tag-option" data-tag="Railway" onclick="toggleTag(this)">Railway</button>
+                                <button type="button" class="tag-option" data-tag="Vercel" onclick="toggleTag(this)">Vercel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editDemo">Live Demo URL</label>
+                    <input type="text" id="editDemo" name="demo" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn btn-primary manage-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="delete-modal" id="deleteModal">
+        <div class="delete-modal-overlay" onclick="closeDelete()"></div>
+        <div class="delete-modal-content">
+            <div class="delete-modal-icon">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </div>
+            <h3 class="delete-modal-title">Delete Project</h3>
+            <p class="delete-modal-desc">Are you sure you want to delete "<span id="deleteProjectName"></span>"? This action cannot be undone.</p>
+            <div class="delete-modal-actions">
+                <button type="button" class="btn delete-modal-cancel" onclick="closeDelete()">Cancel</button>
+                <form id="deleteForm" method="POST" style="display:inline">
+                    <button type="submit" class="btn delete-modal-confirm">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.scrollTo(0, 0);
+
+        document.addEventListener('click', function(e) {
+            var dropdown = document.querySelector('.user-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        function toggleTag(btn) {
+            var selector = btn.closest('.tag-selector');
+            var selected = selector.querySelectorAll('.tag-option.selected');
+
+            if (btn.classList.contains('selected')) {
+                btn.classList.remove('selected');
+                var hidden = btn.nextElementSibling;
+                if (hidden && hidden.name === 'tags') hidden.remove();
+            } else {
+                btn.classList.add('selected');
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'tags';
+                input.value = btn.dataset.tag;
+                btn.after(input);
+            }
+        }
+
+        function openEdit(id, title, desc, tags, demo) {
+            var modal = document.getElementById('editModal');
+            document.getElementById('editForm').action = '/manage/edit/' + id;
+            document.getElementById('editTitle').value = title;
+            document.getElementById('editDescription').value = desc;
+            document.getElementById('editDemo').value = demo;
+
+            // Reset edit tags
+            var editSelector = document.getElementById('editTagSelector');
+            editSelector.querySelectorAll('.tag-option').forEach(function(btn) {
+                btn.classList.remove('selected');
+                var hidden = btn.nextElementSibling;
+                if (hidden && hidden.name === 'tags') hidden.remove();
+            });
+
+            // Set selected tags
+            if (tags) {
+                var tagArr = tags.split(',');
+                tagArr.forEach(function(tag) {
+                    var btn = editSelector.querySelector('[data-tag="' + tag + '"]');
+                    if (btn) {
+                        btn.classList.add('selected');
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'tags';
+                        input.value = tag;
+                        btn.after(input);
+                    }
+                });
+            }
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEdit() {
+            document.getElementById('editModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function openDelete(id, title) {
+            document.getElementById('deleteForm').action = '/manage/delete/' + id;
+            document.getElementById('deleteProjectName').textContent = title;
+            document.getElementById('deleteModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDelete() {
+            document.getElementById('deleteModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Drag to reorder
+        (function() {
+            var list = document.querySelector('.manage-list');
+            if (!list) return;
+
+            var dragItem = null;
+            var offsetY = 0;
+            var placeholder = document.createElement('div');
+            placeholder.className = 'manage-item-placeholder';
+            var isDragging = false;
+            var nextSibling = null;
+
+            list.querySelectorAll('.manage-item-drag').forEach(function(handle) {
+                handle.style.touchAction = 'none';
+                handle.addEventListener('pointerdown', function(e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+
+                    isDragging = true;
+                    dragItem = handle.closest('.manage-item');
+                    nextSibling = dragItem.nextSibling;
+                    dragItem.classList.add('dragging');
+
+                    var rect = dragItem.getBoundingClientRect();
+                    offsetY = e.clientY - rect.top;
+
+                    dragItem.style.width = rect.width + 'px';
+                    placeholder.style.height = rect.height + 'px';
+                    list.insertBefore(placeholder, nextSibling);
+
+                    // Move to body to escape parent transform (pageSlideUp animation)
+                    document.body.appendChild(dragItem);
+                    dragItem.style.position = 'fixed';
+                    dragItem.style.top = rect.top + 'px';
+                    dragItem.style.left = rect.left + 'px';
+                    dragItem.style.zIndex = '999';
+                }, { capture: true });
+            });
+
+            document.addEventListener('pointermove', function(ev) {
+                if (!isDragging || !dragItem) return;
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+
+                dragItem.style.top = (ev.clientY - offsetY) + 'px';
+
+                var items = list.querySelectorAll('.manage-item:not(.dragging)');
+                var after = null;
+                items.forEach(function(item) {
+                    var box = item.getBoundingClientRect();
+                    if (ev.clientY > box.top + box.height / 2) {
+                        after = item;
+                    }
+                });
+
+                if (after) {
+                    after.after(placeholder);
+                } else {
+                    list.prepend(placeholder);
+                }
+            }, { capture: true });
+
+            document.addEventListener('pointerup', function(ev) {
+                if (!isDragging || !dragItem) return;
+                ev.stopImmediatePropagation();
+
+                isDragging = false;
+                dragItem.classList.remove('dragging');
+                dragItem.style.position = '';
+                dragItem.style.top = '';
+                dragItem.style.left = '';
+                dragItem.style.width = '';
+                dragItem.style.zIndex = '';
+
+                // Move back into list at placeholder position
+                list.insertBefore(dragItem, placeholder);
+                placeholder.remove();
+
+                // Save new order
+                var order = [];
+                list.querySelectorAll('.manage-item').forEach(function(item) {
+                    order.push(item.dataset.id);
+                });
+
+                fetch('/manage/reorder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ order: order })
+                }).then(function(r) { return r.json(); }).then(function(data) {
+                    if (!data.success) console.error('Reorder failed:', data);
+                }).catch(function(err) {
+                    console.error('Reorder error:', err);
+                });
+
+                dragItem = null;
+            }, { capture: true });
+        })();
+
+        // Dashboard Chart
+        (function() {
+            var canvas = document.getElementById('visitChart');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var allVisits = <%- visits %>;
+            var currentDays = 7;
+            var selectedDate = null;
+            var chartState = { points: [], data: [], labels: [], chartH: 0, activeIndex: -1 };
+
+            // Tooltip element
+            var tooltip = document.createElement('div');
+            tooltip.className = 'chart-tooltip';
+            canvas.parentElement.style.position = 'relative';
+            canvas.parentElement.appendChild(tooltip);
+
+            function drawChart(days, highlightIdx) {
+                var dpr = window.devicePixelRatio || 1;
+                var rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width * dpr;
+                canvas.height = 280 * dpr;
+                canvas.style.width = rect.width + 'px';
+                canvas.style.height = '280px';
+                ctx.scale(dpr, dpr);
+
+                var w = rect.width;
+                var h = 280;
+                var padTop = 20, padBottom = 40, padLeft = 45, padRight = 20;
+                var chartW = w - padLeft - padRight;
+                var chartH = h - padTop - padBottom;
+
+                // Build data for last N days
+                var labels = [];
+                var data = [];
+                var now = new Date();
+                for (var i = days - 1; i >= 0; i--) {
+                    var d = new Date(now);
+                    d.setDate(d.getDate() - i);
+                    var key = d.toISOString().slice(0, 10);
+                    labels.push(key);
+                    var found = allVisits.find(function(v) { return v.date === key; });
+                    data.push(found ? found.count : 0);
+                }
+
+                var maxVal = Math.max.apply(null, data);
+                if (maxVal === 0) maxVal = 10;
+                maxVal = Math.ceil(maxVal * 1.2);
+
+                ctx.clearRect(0, 0, w, h);
+
+                // Grid lines
+                ctx.strokeStyle = '#f0f0f0';
+                ctx.lineWidth = 1;
+                var gridCount = 5;
+                for (var i = 0; i <= gridCount; i++) {
+                    var y = padTop + (chartH / gridCount) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(padLeft, y);
+                    ctx.lineTo(w - padRight, y);
+                    ctx.stroke();
+
+                    var val = Math.round(maxVal - (maxVal / gridCount) * i);
+                    ctx.fillStyle = '#aaa';
+                    ctx.font = '11px Inter, sans-serif';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(val, padLeft - 8, y + 4);
+                }
+
+                if (data.length < 2) return;
+
+                var stepX = chartW / (data.length - 1);
+
+                var points = data.map(function(v, i) {
+                    return {
+                        x: padLeft + i * stepX,
+                        y: padTop + chartH - (v / maxVal) * chartH
+                    };
+                });
+
+                // Save state for hover
+                chartState.points = points;
+                chartState.data = data;
+                chartState.labels = labels;
+                chartState.chartH = chartH;
+
+                // Selected date highlight (persistent)
+                var selectedIdx = selectedDate ? labels.indexOf(selectedDate) : -1;
+                if (selectedIdx >= 0) {
+                    var colW = stepX * 0.6;
+                    ctx.fillStyle = 'rgba(34, 34, 34, 0.06)';
+                    ctx.beginPath();
+                    ctx.roundRect(points[selectedIdx].x - colW / 2, padTop, colW, chartH, 4);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(points[selectedIdx].x, padTop);
+                    ctx.lineTo(points[selectedIdx].x, padTop + chartH);
+                    ctx.strokeStyle = 'rgba(34, 34, 34, 0.3)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+
+                // Hover vertical line (dashed)
+                if (typeof highlightIdx === 'number' && highlightIdx >= 0 && highlightIdx < points.length && highlightIdx !== selectedIdx) {
+                    ctx.beginPath();
+                    ctx.moveTo(points[highlightIdx].x, padTop);
+                    ctx.lineTo(points[highlightIdx].x, padTop + chartH);
+                    ctx.strokeStyle = 'rgba(34, 34, 34, 0.15)';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([4, 3]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Gradient fill
+                var grad = ctx.createLinearGradient(0, padTop, 0, padTop + chartH);
+                grad.addColorStop(0, 'rgba(34, 34, 34, 0.12)');
+                grad.addColorStop(1, 'rgba(34, 34, 34, 0)');
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (var i = 1; i < points.length; i++) {
+                    var cx = (points[i - 1].x + points[i].x) / 2;
+                    ctx.bezierCurveTo(cx, points[i - 1].y, cx, points[i].y, points[i].x, points[i].y);
+                }
+                ctx.lineTo(points[points.length - 1].x, padTop + chartH);
+                ctx.lineTo(points[0].x, padTop + chartH);
+                ctx.closePath();
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                // Line
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (var i = 1; i < points.length; i++) {
+                    var cx = (points[i - 1].x + points[i].x) / 2;
+                    ctx.bezierCurveTo(cx, points[i - 1].y, cx, points[i].y, points[i].x, points[i].y);
+                }
+                ctx.strokeStyle = '#222';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Dots
+                points.forEach(function(p, i) {
+                    var isHover = i === highlightIdx;
+                    var isSelected = i === selectedIdx;
+                    var r = (isHover || isSelected) ? 5 : 3.5;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+                    ctx.fillStyle = (isSelected || isHover) ? '#222' : '#fff';
+                    ctx.fill();
+                    ctx.strokeStyle = '#222';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    if (isSelected) {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(34, 34, 34, 0.25)';
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    }
+                });
+
+                // X labels
+                ctx.textAlign = 'center';
+                var labelStep = days > 14 ? Math.ceil(days / 7) : 1;
+                labels.forEach(function(label, i) {
+                    if (i % labelStep !== 0 && i !== labels.length - 1 && i !== selectedIdx) return;
+                    var parts = label.split('-');
+                    var text = parseInt(parts[2]) + '/' + parseInt(parts[1]);
+                    ctx.fillStyle = i === selectedIdx ? '#222' : '#aaa';
+                    ctx.font = i === selectedIdx ? 'bold 11px Inter, sans-serif' : '11px Inter, sans-serif';
+                    ctx.fillText(text, points[i].x, h - padBottom + 18);
+                });
+            }
+
+            // Expose for date picker sync
+            window.chartSelectDate = function(date) {
+                selectedDate = date;
+                drawChart(currentDays);
+            };
+            window.chartClearDate = function() {
+                selectedDate = null;
+                drawChart(currentDays);
+            };
+
+            drawChart(currentDays);
+
+            // Hover handler
+            canvas.addEventListener('mousemove', function(e) {
+                var rect = canvas.getBoundingClientRect();
+                var mx = e.clientX - rect.left;
+                var points = chartState.points;
+                if (!points.length) return;
+
+                // Find closest point
+                var closest = -1;
+                var minDist = Infinity;
+                for (var i = 0; i < points.length; i++) {
+                    var dist = Math.abs(mx - points[i].x);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closest = i;
+                    }
+                }
+
+                if (closest !== chartState.activeIndex) {
+                    chartState.activeIndex = closest;
+                    drawChart(currentDays, closest);
+                }
+
+                if (closest >= 0 && minDist < 50) {
+                    var parts = chartState.labels[closest].split('-');
+                    var dateStr = parseInt(parts[2]) + '/' + parseInt(parts[1]) + '/' + parts[0];
+                    tooltip.innerHTML = '<strong>' + chartState.data[closest] + ' visits</strong><br>' + dateStr;
+                    tooltip.style.opacity = '1';
+
+                    // Position tooltip
+                    var tx = points[closest].x;
+                    var ty = points[closest].y - 12;
+                    var tw = tooltip.offsetWidth;
+                    if (tx + tw / 2 > rect.width - 10) tx = rect.width - tw / 2 - 10;
+                    if (tx - tw / 2 < 10) tx = tw / 2 + 10;
+                    tooltip.style.left = tx + 'px';
+                    tooltip.style.top = ty + 'px';
+                } else {
+                    tooltip.style.opacity = '0';
+                }
+            });
+
+            canvas.addEventListener('mouseleave', function() {
+                chartState.activeIndex = -1;
+                tooltip.style.opacity = '0';
+                drawChart(currentDays);
+            });
+
+            // Click on chart to select day
+            canvas.addEventListener('click', function(e) {
+                var rect = canvas.getBoundingClientRect();
+                var mx = e.clientX - rect.left;
+                var points = chartState.points;
+                if (!points.length) return;
+
+                var closest = -1;
+                var minDist = Infinity;
+                for (var i = 0; i < points.length; i++) {
+                    var dist = Math.abs(mx - points[i].x);
+                    if (dist < minDist) { minDist = dist; closest = i; }
+                }
+
+                if (closest >= 0 && chartState.labels[closest]) {
+                    var clickedDate = chartState.labels[closest];
+                    if (selectedDate === clickedDate) {
+                        selectedDate = null;
+                        document.getElementById('dashboardDate').value = new Date().toISOString().slice(0, 10);
+                        resetToOverall();
+                        drawChart(currentDays);
+                    } else {
+                        selectedDate = clickedDate;
+                        document.getElementById('dashboardDate').value = clickedDate;
+                        loadDailyStats(clickedDate);
+                        drawChart(currentDays);
+                    }
+                }
+            });
+
+            document.querySelectorAll('.chart-range-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.chart-range-btn').forEach(function(b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    currentDays = parseInt(btn.dataset.days);
+                    chartState.activeIndex = -1;
+                    tooltip.style.opacity = '0';
+                    drawChart(currentDays);
+                });
+            });
+
+            window.addEventListener('resize', function() {
+                drawChart(currentDays);
+            });
+        })();
+
+        // Daily stats loader
+        var overallStats = {
+            visits: <%= totalVisits %>,
+            today: <%= todayVisits %>,
+            users: <%= totalUsers %>,
+            projects: <%= projects.length %>
+        };
+
+        function loadDailyStats(date) {
+            fetch('/manage/stats/' + date, { credentials: 'same-origin' })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.error) return;
+                    document.getElementById('statVisits').textContent = data.visits;
+                    document.getElementById('statVisitsLabel').textContent = 'Visits';
+                    document.getElementById('statUsers').textContent = data.users;
+                    document.getElementById('statUsersLabel').textContent = 'Users';
+                    document.getElementById('statProjects').textContent = data.projects;
+                    document.getElementById('statProjectsLabel').textContent = 'Projects';
+
+                    document.querySelector('.dashboard-stats').classList.add('daily-mode');
+                    if (window.chartSelectDate) window.chartSelectDate(date);
+                }).catch(function() {});
+        }
+
+        function resetToOverall() {
+            document.getElementById('statVisits').textContent = overallStats.visits;
+            document.getElementById('statVisitsLabel').textContent = 'Visits';
+            document.getElementById('statUsers').textContent = overallStats.users;
+            document.getElementById('statUsersLabel').textContent = 'Users';
+            document.getElementById('statProjects').textContent = overallStats.projects;
+            document.getElementById('statProjectsLabel').textContent = 'Projects';
+            document.getElementById('dashboardDate').value = new Date().toISOString().slice(0, 10);
+            document.querySelector('.dashboard-stats').classList.remove('daily-mode');
+            if (window.chartClearDate) window.chartClearDate();
+        }
+
+        document.getElementById('dashboardDate').addEventListener('change', function() {
+            var val = this.value;
+            if (val) loadDailyStats(val);
+        });
+
+        document.getElementById('dashboardDateReset').addEventListener('click', function() {
+            resetToOverall();
+        });
+    </script>
+
+</body>
+</html>

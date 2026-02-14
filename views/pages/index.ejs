@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/components/scrollbar.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="/js/security.js" defer></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="nav-logo">Portfolio</a>
+            <button class="nav-hamburger" onclick="var m=document.querySelector('.mobile-user-modal');if(m&&m.classList.contains('open')){m.classList.remove('open')}else{this.classList.toggle('active');document.querySelector('.nav-menu-mobile').classList.toggle('open');document.body.classList.toggle('menu-open')}">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-menu nav-menu-desktop">
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#tech">Tech Stack</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-divider"></div>
+                <ul class="nav-links nav-auth">
+                    <% if (user) { %>
+                        <li class="user-dropdown">
+                            <button class="user-dropdown-btn" onclick="this.parentElement.classList.toggle('open')">
+                                <%= user.username %>
+                                <svg class="dropdown-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                            <div class="user-dropdown-menu">
+                                <% if (user.email === 'phomphat385@gmail.com') { %>
+                                    <a href="/manage">Manage</a>
+                                <% } %>
+                                <a href="/logout">Logout</a>
+                            </div>
+                        </li>
+                    <% } else { %>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Modal Menu -->
+    <div class="nav-menu nav-menu-mobile">
+        <ul class="nav-links">
+            <li><a href="#about" onclick="document.querySelector('.nav-hamburger').click()">About</a></li>
+            <li><a href="#tech" onclick="document.querySelector('.nav-hamburger').click()">Tech Stack</a></li>
+            <li><a href="#projects" onclick="document.querySelector('.nav-hamburger').click()">Projects</a></li>
+            <li><a href="#contact" onclick="document.querySelector('.nav-hamburger').click()">Contact</a></li>
+        </ul>
+        <div class="nav-divider"></div>
+        <ul class="nav-links nav-auth">
+            <% if (user) { %>
+                <li>
+                    <button class="mobile-user-btn" onclick="document.querySelector('.mobile-user-modal').classList.add('open')">
+                        <%= user.username %>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </li>
+            <% } else { %>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            <% } %>
+        </ul>
+    </div>
+
+    <% if (typeof user !== 'undefined' && user) { %>
+    <!-- Mobile User Modal -->
+    <div class="mobile-user-modal">
+        <button class="mobile-user-back" onclick="this.parentElement.classList.remove('open')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Back
+        </button>
+        <div class="mobile-user-info"><%= user.username %></div>
+        <div class="nav-divider"></div>
+        <ul class="nav-links">
+            <% if (user.email === 'phomphat385@gmail.com') { %>
+                <li><a href="/manage">Manage</a></li>
+            <% } %>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+    <% } %>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container hero-content">
+            <p class="hero-greeting">Hello, I'm</p>
+            <h1 class="hero-name">PHOOMPHAT</h1>
+            <p class="hero-role">Full Stack Developer</p>
+            <p class="hero-desc">I build web applications with modern technologies.</p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#contact" class="btn btn-outline">Contact Me</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <p>I'm a passionate developer who loves building web applications. I enjoy working with JavaScript, Node.js, and MongoDB to create full-stack solutions that solve real problems.</p>
+                <p>Currently focused on learning and growing as a developer, exploring new technologies, and building projects that challenge me.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="section section-alt" id="tech">
+        <div class="container">
+            <h2 class="section-title">Tech Stack</h2>
+            <div class="tech-categories">
+                <div class="tech-category">
+                    <h3 class="tech-category-title">Code</h3>
+                    <div class="tech-grid">
+                        <span class="tech-tag">Lua</span>
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Express</span>
+                        <span class="tech-tag">JavaScript</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3 class="tech-category-title">Database</h3>
+                    <div class="tech-grid">
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Firebase</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3 class="tech-category-title">Hosting</h3>
+                    <div class="tech-grid">
+                        <span class="tech-tag">Vercel</span>
+                        <span class="tech-tag">Railway</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <% if (projects && projects.length > 0) { %>
+                <div class="projects-slider">
+                    <div class="projects-grid" id="projectsGrid">
+                        <% projects.forEach(project => { %>
+                            <div class="project-card">
+                                <div class="project-header">
+                                    <svg class="project-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="project-title"><%= project.title %></h3>
+                                <p class="project-desc"><%= project.description %></p>
+                                <% if (project.tags && project.tags.length > 0) { %>
+                                    <div class="project-tags-wrapper">
+                                        <button type="button" class="tags-arrow tags-arrow-left" onclick="scrollTags(this, -1)">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                                        </button>
+                                        <div class="project-tags">
+                                            <% project.tags.forEach(tag => { %>
+                                                <span class="tag"><%= tag %></span>
+                                            <% }) %>
+                                        </div>
+                                        <button type="button" class="tags-arrow tags-arrow-right" onclick="scrollTags(this, 1)">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                        </button>
+                                    </div>
+                                <% } %>
+                                <div class="project-footer">
+                                    <% if (project.demo) { %>
+                                        <a href="<%= project.demo %>" class="project-link" target="_blank">Preview</a>
+                                    <% } %>
+                                    <button type="button" class="project-like-btn<%= user && project.likedBy && project.likedBy.some(id => id.toString() === user.id.toString()) ? ' liked' : '' %>" data-id="<%= project._id %>" onclick="toggleLike(this)">
+                                        <svg class="like-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                        <span class="like-count"><%= project.likes || 0 %></span>
+                                    </button>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                    <div class="projects-nav">
+                        <button class="projects-nav-btn projects-prev" id="projectsPrev" onclick="slideProjects(-1)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div class="projects-dots" id="projectsDots"></div>
+                        <button class="projects-nav-btn projects-next" id="projectsNext" onclick="slideProjects(1)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            <% } else { %>
+                <p class="projects-empty">No projects yet.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section-alt" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <p class="contact-desc">Interested in working together? Feel free to reach out.</p>
+            <div class="contact-links">
+                <a href="https://www.instagram.com/phoomphat.disappear" class="btn btn-primary">Instagram</a>
+                <a href="https://www.facebook.com/Phoomphat.phe" class="btn btn-outline">Facebook</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 PHOOMPHAT. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.scrollTo(0, 0);
+        document.addEventListener('click', function(e) {
+            var dropdown = document.querySelector('.user-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        // Like
+        function toggleLike(btn) {
+            var id = btn.dataset.id;
+            if (!id) return;
+
+            fetch('/project/' + id + '/like', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(function(res) {
+                    if (res.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    if (!res.ok) throw new Error(res.status);
+                    return res.json();
+                })
+                .then(function(data) {
+                    if (!data) return;
+                    btn.querySelector('.like-count').textContent = data.likes;
+                    if (data.liked) {
+                        btn.classList.add('liked');
+                    } else {
+                        btn.classList.remove('liked');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Like error:', err);
+                });
+        }
+
+        // Tags scroll
+        function scrollTags(btn, dir) {
+            var wrapper = btn.closest('.project-tags-wrapper');
+            var tags = wrapper.querySelector('.project-tags');
+            tags.scrollBy({ left: dir * 80, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.project-tags-wrapper').forEach(function(wrapper) {
+            var tags = wrapper.querySelector('.project-tags');
+            var leftArr = wrapper.querySelector('.tags-arrow-left');
+            var rightArr = wrapper.querySelector('.tags-arrow-right');
+
+            function updateArrows() {
+                leftArr.disabled = tags.scrollLeft <= 0;
+                rightArr.disabled = tags.scrollLeft >= tags.scrollWidth - tags.clientWidth - 1;
+            }
+
+            updateArrows();
+            tags.addEventListener('scroll', updateArrows);
+            new ResizeObserver(updateArrows).observe(tags);
+        });
+
+        // Projects slider
+        (function() {
+            var grid = document.getElementById('projectsGrid');
+            if (!grid) return;
+
+            var cards = grid.querySelectorAll('.project-card');
+            var dotsContainer = document.getElementById('projectsDots');
+            var prevBtn = document.getElementById('projectsPrev');
+            var nextBtn = document.getElementById('projectsNext');
+            var perPage = 3;
+            var currentPage = 0;
+            var animating = false;
+
+            function isMobile() {
+                return window.innerWidth <= 768;
+            }
+
+            function getTotalPages() {
+                return Math.ceil(cards.length / perPage);
+            }
+
+            function buildDots() {
+                dotsContainer.innerHTML = '';
+                var total = getTotalPages();
+                for (var i = 0; i < total; i++) {
+                    var dot = document.createElement('button');
+                    dot.className = 'projects-dot' + (i === currentPage ? ' active' : '');
+                    dot.setAttribute('data-page', i);
+                    dot.onclick = function() { goToPage(parseInt(this.dataset.page)); };
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function updateNav() {
+                var total = getTotalPages();
+                prevBtn.disabled = currentPage === 0;
+                nextBtn.disabled = currentPage >= total - 1;
+                var dots = dotsContainer.querySelectorAll('.projects-dot');
+                dots.forEach(function(d, i) {
+                    d.classList.toggle('active', i === currentPage);
+                });
+            }
+
+            function showMobilePage(page, animate) {
+                var start = page * perPage;
+                var end = start + perPage;
+
+                if (!animate) {
+                    cards.forEach(function(card, i) {
+                        card.classList.remove('mobile-hidden', 'mobile-slide-out', 'mobile-slide-in');
+                        if (i >= start && i < end) {
+                            card.style.display = '';
+                        } else {
+                            card.classList.add('mobile-hidden');
+                        }
+                    });
+                    return;
+                }
+
+                animating = true;
+
+                // Slide out visible cards
+                cards.forEach(function(card) {
+                    if (!card.classList.contains('mobile-hidden')) {
+                        card.classList.add('mobile-slide-out');
+                    }
+                });
+
+                setTimeout(function() {
+                    // Hide all, show new page with slide-in
+                    cards.forEach(function(card, i) {
+                        card.classList.remove('mobile-slide-out');
+                        if (i >= start && i < end) {
+                            card.classList.remove('mobile-hidden');
+                            card.classList.add('mobile-slide-in');
+                        } else {
+                            card.classList.add('mobile-hidden');
+                            card.classList.remove('mobile-slide-in');
+                        }
+                    });
+
+                    // Trigger reflow then remove slide-in
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            cards.forEach(function(card) {
+                                card.classList.remove('mobile-slide-in');
+                            });
+                            animating = false;
+                        });
+                    });
+                }, 500);
+            }
+
+            function goToPage(page) {
+                if (animating) return;
+                var total = getTotalPages();
+                if (page < 0 || page >= total) return;
+                var oldPage = currentPage;
+                currentPage = page;
+
+                if (isMobile()) {
+                    showMobilePage(page, oldPage !== page);
+                } else {
+                    var cardWidth = cards[0].offsetWidth;
+                    var gap = 24;
+                    var offset = currentPage * perPage * (cardWidth + gap);
+                    grid.scrollTo({ left: offset, behavior: 'smooth' });
+                }
+                updateNav();
+            }
+
+            window.slideProjects = function(dir) {
+                goToPage(currentPage + dir);
+            };
+
+            function onResize() {
+                perPage = 3;
+                var total = getTotalPages();
+                if (currentPage >= total) currentPage = total - 1;
+                if (currentPage < 0) currentPage = 0;
+                buildDots();
+                updateNav();
+
+                if (cards.length <= perPage) {
+                    grid.classList.add('few-cards');
+                } else {
+                    grid.classList.remove('few-cards');
+                }
+
+                if (isMobile()) {
+                    showMobilePage(currentPage, false);
+                } else {
+                    // Reset mobile classes
+                    cards.forEach(function(card) {
+                        card.classList.remove('mobile-hidden', 'mobile-slide-out', 'mobile-slide-in');
+                        card.style.display = '';
+                    });
+                }
+            }
+
+            function checkNav() {
+                var nav = document.querySelector('.projects-nav');
+                if (nav) {
+                    nav.style.display = cards.length <= perPage ? 'none' : 'flex';
+                }
+            }
+
+            onResize();
+            checkNav();
+            window.addEventListener('resize', function() { onResize(); checkNav(); });
+        })();
+    </script>
+
+</body>
+</html>
