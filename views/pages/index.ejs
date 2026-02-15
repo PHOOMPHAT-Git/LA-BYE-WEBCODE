@@ -3,450 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>La Bye - ระบายใจ</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/components/scrollbar.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <script src="/js/security.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap">
 </head>
 <body>
 
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-content">
-            <a href="#" class="nav-logo">Portfolio</a>
-            <button class="nav-hamburger" onclick="var m=document.querySelector('.mobile-user-modal');if(m&&m.classList.contains('open')){m.classList.remove('open')}else{this.classList.toggle('active');document.querySelector('.nav-menu-mobile').classList.toggle('open');document.body.classList.toggle('menu-open')}">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="nav-menu nav-menu-desktop">
-                <ul class="nav-links">
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#tech">Tech Stack</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="nav-divider"></div>
-                <ul class="nav-links nav-auth">
-                    <% if (user) { %>
-                        <li class="user-dropdown">
-                            <button class="user-dropdown-btn" onclick="this.parentElement.classList.toggle('open')">
-                                <%= user.username %>
-                                <svg class="dropdown-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                            </button>
-                            <div class="user-dropdown-menu">
-                                <% if (user.email === 'phomphat385@gmail.com') { %>
-                                    <a href="/manage">Manage</a>
-                                <% } %>
-                                <a href="/logout">Logout</a>
-                            </div>
-                        </li>
-                    <% } else { %>
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/register">Register</a></li>
-                    <% } %>
-                </ul>
+            <a href="/" class="nav-logo">La Bye</a>
+            <div class="nav-menu">
+                <% if (user) { %>
+                    <a href="/" class="nav-link active">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <span>หน้าแรก</span>
+                    </a>
+                    <a href="/profile" class="nav-link">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>โปรไฟล์</span>
+                    </a>
+                    <div class="nav-user">
+                        <button class="nav-user-btn" onclick="this.parentElement.classList.toggle('open')">
+                            <% if (user.avatar) { %>
+                                <img src="<%= user.avatar %>" alt="" class="nav-avatar">
+                            <% } else { %>
+                                <div class="nav-avatar nav-avatar-default"><%= (user.displayName || user.username).charAt(0) %></div>
+                            <% } %>
+                            <span class="nav-username"><%= user.displayName || user.username %></span>
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="nav-dropdown">
+                            <a href="/profile">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                โปรไฟล์ของฉัน
+                            </a>
+                            <% if (user.email === 'phomphat385@gmail.com') { %>
+                                <a href="/manage">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                    จัดการระบบ
+                                </a>
+                            <% } %>
+                            <div class="nav-dropdown-divider"></div>
+                            <a href="/logout">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                ออกจากระบบ
+                            </a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="btn btn-outline btn-sm">เข้าสู่ระบบ</a>
+                    <a href="/register" class="btn btn-primary btn-sm">สมัครสมาชิก</a>
+                <% } %>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Modal Menu -->
-    <div class="nav-menu nav-menu-mobile">
-        <ul class="nav-links">
-            <li><a href="#about" onclick="document.querySelector('.nav-hamburger').click()">About</a></li>
-            <li><a href="#tech" onclick="document.querySelector('.nav-hamburger').click()">Tech Stack</a></li>
-            <li><a href="#projects" onclick="document.querySelector('.nav-hamburger').click()">Projects</a></li>
-            <li><a href="#contact" onclick="document.querySelector('.nav-hamburger').click()">Contact</a></li>
-        </ul>
-        <div class="nav-divider"></div>
-        <ul class="nav-links nav-auth">
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="feed-container">
+
+            <!-- Create Post -->
             <% if (user) { %>
-                <li>
-                    <button class="mobile-user-btn" onclick="document.querySelector('.mobile-user-modal').classList.add('open')">
-                        <%= user.username %>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            <div class="card create-post-card">
+                <div class="create-post-header">
+                    <% if (user.avatar) { %>
+                        <img src="<%= user.avatar %>" alt="" class="avatar avatar-md">
+                    <% } else { %>
+                        <div class="avatar avatar-md avatar-default"><%= (user.displayName || user.username).charAt(0) %></div>
+                    <% } %>
+                    <button class="create-post-input" onclick="openCreatePost()">คุณรู้สึกอย่างไร...</button>
+                </div>
+                <div class="create-post-actions">
+                    <button class="create-post-action" onclick="openCreatePost()">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#43a047" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        รูปภาพ
                     </button>
-                </li>
+                    <button class="create-post-action" onclick="openCreatePost()">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#e53935" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        ระบายใจ
+                    </button>
+                </div>
+            </div>
             <% } else { %>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
+            <div class="card login-prompt-card">
+                <p>เข้าสู่ระบบเพื่อเริ่มระบายความรู้สึก</p>
+                <div class="login-prompt-actions">
+                    <a href="/login" class="btn btn-primary">เข้าสู่ระบบ</a>
+                    <a href="/register" class="btn btn-outline">สมัครสมาชิก</a>
+                </div>
+            </div>
             <% } %>
-        </ul>
-    </div>
 
-    <% if (typeof user !== 'undefined' && user) { %>
-    <!-- Mobile User Modal -->
-    <div class="mobile-user-modal">
-        <button class="mobile-user-back" onclick="this.parentElement.classList.remove('open')">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            Back
-        </button>
-        <div class="mobile-user-info"><%= user.username %></div>
-        <div class="nav-divider"></div>
-        <ul class="nav-links">
-            <% if (user.email === 'phomphat385@gmail.com') { %>
-                <li><a href="/manage">Manage</a></li>
-            <% } %>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
-    </div>
-    <% } %>
-
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="container hero-content">
-            <p class="hero-greeting">Hello, I'm</p>
-            <h1 class="hero-name">PHOOMPHAT</h1>
-            <p class="hero-role">Full Stack Developer</p>
-            <p class="hero-desc">I build web applications with modern technologies.</p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">View Projects</a>
-                <a href="#contact" class="btn btn-outline">Contact Me</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <p>I'm a passionate developer who loves building web applications. I enjoy working with JavaScript, Node.js, and MongoDB to create full-stack solutions that solve real problems.</p>
-                <p>Currently focused on learning and growing as a developer, exploring new technologies, and building projects that challenge me.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Stack Section -->
-    <section class="section section-alt" id="tech">
-        <div class="container">
-            <h2 class="section-title">Tech Stack</h2>
-            <div class="tech-categories">
-                <div class="tech-category">
-                    <h3 class="tech-category-title">Code</h3>
-                    <div class="tech-grid">
-                        <span class="tech-tag">Lua</span>
-                        <span class="tech-tag">PHP</span>
-                        <span class="tech-tag">CSS</span>
-                        <span class="tech-tag">HTML</span>
-                        <span class="tech-tag">React</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">Express</span>
-                        <span class="tech-tag">JavaScript</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3 class="tech-category-title">Database</h3>
-                    <div class="tech-grid">
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">MongoDB</span>
-                        <span class="tech-tag">Firebase</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h3 class="tech-category-title">Hosting</h3>
-                    <div class="tech-grid">
-                        <span class="tech-tag">Vercel</span>
-                        <span class="tech-tag">Railway</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="section" id="projects">
-        <div class="container">
-            <h2 class="section-title">Projects</h2>
-            <% if (projects && projects.length > 0) { %>
-                <div class="projects-slider">
-                    <div class="projects-grid" id="projectsGrid">
-                        <% projects.forEach(project => { %>
-                            <div class="project-card">
-                                <div class="project-header">
-                                    <svg class="project-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                                    </svg>
-                                </div>
-                                <h3 class="project-title"><%= project.title %></h3>
-                                <p class="project-desc"><%= project.description %></p>
-                                <% if (project.tags && project.tags.length > 0) { %>
-                                    <div class="project-tags-wrapper">
-                                        <button type="button" class="tags-arrow tags-arrow-left" onclick="scrollTags(this, -1)">
-                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                                        </button>
-                                        <div class="project-tags">
-                                            <% project.tags.forEach(tag => { %>
-                                                <span class="tag"><%= tag %></span>
-                                            <% }) %>
-                                        </div>
-                                        <button type="button" class="tags-arrow tags-arrow-right" onclick="scrollTags(this, 1)">
-                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-                                        </button>
-                                    </div>
-                                <% } %>
-                                <div class="project-footer">
-                                    <% if (project.demo) { %>
-                                        <a href="<%= project.demo %>" class="project-link" target="_blank">Preview</a>
+            <!-- Posts Feed -->
+            <% if (posts && posts.length > 0) { %>
+                <% posts.forEach(function(post) { %>
+                <div class="card post-card" data-id="<%= post._id %>">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <% if (post.isAnonymous) { %>
+                                <div class="avatar avatar-md avatar-anonymous">?</div>
+                            <% } else if (post.author && post.author.avatar) { %>
+                                <img src="<%= post.author.avatar %>" alt="" class="avatar avatar-md">
+                            <% } else { %>
+                                <div class="avatar avatar-md avatar-default"><%= post.author ? (post.author.displayName || post.author.username).charAt(0) : '?' %></div>
+                            <% } %>
+                            <div class="post-author-info">
+                                <span class="post-author-name">
+                                    <% if (post.isAnonymous) { %>
+                                        ไม่ระบุตัวตน
+                                    <% } else { %>
+                                        <%= post.author ? (post.author.displayName || post.author.username) : 'ผู้ใช้ที่ถูกลบ' %>
                                     <% } %>
-                                    <button type="button" class="project-like-btn<%= user && project.likedBy && project.likedBy.some(id => id.toString() === user.id.toString()) ? ' liked' : '' %>" data-id="<%= project._id %>" onclick="toggleLike(this)">
-                                        <svg class="like-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                                        <span class="like-count"><%= project.likes || 0 %></span>
-                                    </button>
-                                </div>
+                                </span>
+                                <span class="post-time"><%= new Date(post.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
                             </div>
-                        <% }) %>
+                        </div>
+                        <% if (user && (post.author && post.author._id && post.author._id.toString() === user.id.toString() || user.email === 'phomphat385@gmail.com')) { %>
+                        <button class="post-menu-btn" onclick="deletePost('<%= post._id %>')">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                        <% } %>
                     </div>
-                    <div class="projects-nav">
-                        <button class="projects-nav-btn projects-prev" id="projectsPrev" onclick="slideProjects(-1)">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+
+                    <% if (post.content) { %>
+                        <div class="post-content"><%= post.content %></div>
+                    <% } %>
+
+                    <% if (post.image) { %>
+                        <div class="post-image">
+                            <img src="<%= post.image %>" alt="รูปภาพโพสต์" loading="lazy">
+                        </div>
+                    <% } %>
+
+                    <div class="post-stats">
+                        <span class="post-stat"><%= post.likes || 0 %> ถูกใจ</span>
+                        <span class="post-stat"><%= post.commentCount || 0 %> ความคิดเห็น</span>
+                    </div>
+
+                    <div class="post-actions">
+                        <button class="post-action-btn<%= user && post.likedBy && post.likedBy.some(function(id) { return id.toString() === user.id.toString(); }) ? ' liked' : '' %>" onclick="toggleLike(this, '<%= post._id %>')">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                            ถูกใจ
                         </button>
-                        <div class="projects-dots" id="projectsDots"></div>
-                        <button class="projects-nav-btn projects-next" id="projectsNext" onclick="slideProjects(1)">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        <button class="post-action-btn" onclick="toggleComments('<%= post._id %>')">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            ความคิดเห็น
                         </button>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section" id="comments-<%= post._id %>" style="display: none;">
+                        <div class="comments-list" id="comments-list-<%= post._id %>">
+                            <% if (post.comments && post.comments.length > 0) { %>
+                                <% post.comments.forEach(function(comment) { %>
+                                <div class="comment" data-id="<%= comment._id %>">
+                                    <% if (comment.isAnonymous) { %>
+                                        <div class="avatar avatar-sm avatar-anonymous">?</div>
+                                    <% } else if (comment.author && comment.author.avatar) { %>
+                                        <img src="<%= comment.author.avatar %>" alt="" class="avatar avatar-sm">
+                                    <% } else { %>
+                                        <div class="avatar avatar-sm avatar-default"><%= comment.author ? (comment.author.displayName || comment.author.username).charAt(0) : '?' %></div>
+                                    <% } %>
+                                    <div class="comment-body">
+                                        <div class="comment-bubble">
+                                            <span class="comment-author"><%= comment.isAnonymous ? 'ไม่ระบุตัวตน' : (comment.author ? (comment.author.displayName || comment.author.username) : 'ผู้ใช้ที่ถูกลบ') %></span>
+                                            <span class="comment-text"><%= comment.content %></span>
+                                        </div>
+                                        <div class="comment-meta">
+                                            <span class="comment-time"><%= new Date(comment.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
+                                            <% if (user && (comment.author && comment.author._id && comment.author._id.toString() === user.id.toString() || user.email === 'phomphat385@gmail.com')) { %>
+                                                <button class="comment-delete" onclick="deleteComment('<%= comment._id %>', '<%= post._id %>')">ลบ</button>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                <% if (post.commentCount > 3) { %>
+                                    <button class="load-more-comments" onclick="loadAllComments('<%= post._id %>')">ดูความคิดเห็นทั้งหมด (<%= post.commentCount %>)</button>
+                                <% } %>
+                            <% } %>
+                        </div>
+
+                        <% if (user) { %>
+                        <div class="comment-form">
+                            <% if (user.avatar) { %>
+                                <img src="<%= user.avatar %>" alt="" class="avatar avatar-sm">
+                            <% } else { %>
+                                <div class="avatar avatar-sm avatar-default"><%= (user.displayName || user.username).charAt(0) %></div>
+                            <% } %>
+                            <div class="comment-input-wrapper">
+                                <input type="text" class="comment-input" placeholder="เขียนความคิดเห็น..." onkeydown="if(event.key==='Enter')submitComment(this,'<%= post._id %>')">
+                                <label class="comment-anon-toggle">
+                                    <input type="checkbox" class="comment-anon-checkbox">
+                                    <span class="comment-anon-label">ไม่ระบุตัวตน</span>
+                                </label>
+                            </div>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
+                <% }) %>
             <% } else { %>
-                <p class="projects-empty">No projects yet.</p>
+                <div class="card empty-feed">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <p>ยังไม่มีโพสต์ เริ่มระบายเป็นคนแรกเลย!</p>
+                </div>
             <% } %>
         </div>
-    </section>
+    </main>
 
-    <!-- Contact Section -->
-    <section class="section section-alt" id="contact">
-        <div class="container">
-            <h2 class="section-title">Contact</h2>
-            <p class="contact-desc">Interested in working together? Feel free to reach out.</p>
-            <div class="contact-links">
-                <a href="https://www.instagram.com/phoomphat.disappear" class="btn btn-primary">Instagram</a>
-                <a href="https://www.facebook.com/Phoomphat.phe" class="btn btn-outline">Facebook</a>
+    <!-- Create Post Modal -->
+    <div class="modal" id="createPostModal">
+        <div class="modal-overlay" onclick="closeCreatePost()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>สร้างโพสต์</h2>
+                <button class="modal-close" onclick="closeCreatePost()">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="create-post-user">
+                    <% if (user) { %>
+                        <% if (user.avatar) { %>
+                            <img src="<%= user.avatar %>" alt="" class="avatar avatar-md">
+                        <% } else { %>
+                            <div class="avatar avatar-md avatar-default"><%= (user.displayName || user.username).charAt(0) %></div>
+                        <% } %>
+                        <div>
+                            <span class="create-post-name" id="postDisplayName"><%= user.displayName || user.username %></span>
+                            <label class="anon-toggle">
+                                <input type="checkbox" id="postAnonymous" onchange="toggleAnonymous()">
+                                <span class="anon-toggle-label">โพสต์แบบไม่ระบุตัวตน</span>
+                            </label>
+                        </div>
+                    <% } %>
+                </div>
+                <textarea class="create-post-textarea" id="postContent" placeholder="คุณรู้สึกอย่างไร... ระบายออกมาเลย" rows="5"></textarea>
+                <div class="create-post-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImg" src="" alt="">
+                    <button class="remove-image" onclick="removeImage()">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-footer-left">
+                    <label class="attach-btn">
+                        <input type="file" accept="image/*" id="postImage" onchange="previewImage(this)" style="display: none;">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#43a047" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </label>
+                </div>
+                <button class="btn btn-primary" onclick="submitPost()">ระบาย</button>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 PHOOMPHAT. All rights reserved.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        window.scrollTo(0, 0);
         document.addEventListener('click', function(e) {
-            var dropdown = document.querySelector('.user-dropdown');
-            if (dropdown && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('open');
-            }
+            document.querySelectorAll('.nav-user').forEach(function(el) {
+                if (!el.contains(e.target)) el.classList.remove('open');
+            });
         });
 
-        // Like
-        function toggleLike(btn) {
-            var id = btn.dataset.id;
-            if (!id) return;
+        function openCreatePost() {
+            document.getElementById('createPostModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function() { document.getElementById('postContent').focus(); }, 100);
+        }
 
-            fetch('/project/' + id + '/like', {
+        function closeCreatePost() {
+            document.getElementById('createPostModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function toggleAnonymous() {
+            var isAnon = document.getElementById('postAnonymous').checked;
+            var nameEl = document.getElementById('postDisplayName');
+            nameEl.textContent = isAnon ? 'ไม่ระบุตัวตน' : '<%= user ? (user.displayName || user.username) : "" %>';
+        }
+
+        var imageBase64 = '';
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    imageBase64 = e.target.result;
+                    document.getElementById('previewImg').src = imageBase64;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeImage() {
+            imageBase64 = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        function submitPost() {
+            var content = document.getElementById('postContent').value.trim();
+            var isAnonymous = document.getElementById('postAnonymous').checked;
+            if (!content && !imageBase64) return alert('กรุณาเขียนข้อความหรือแนบรูป');
+
+            fetch('/post/create', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: content, image: imageBase64, isAnonymous: isAnonymous })
             })
-                .then(function(res) {
-                    if (res.status === 401) {
-                        window.location.href = '/login';
-                        return;
-                    }
-                    if (!res.ok) throw new Error(res.status);
-                    return res.json();
-                })
-                .then(function(data) {
-                    if (!data) return;
-                    btn.querySelector('.like-count').textContent = data.likes;
-                    if (data.liked) {
-                        btn.classList.add('liked');
-                    } else {
-                        btn.classList.remove('liked');
-                    }
-                })
-                .catch(function(err) {
-                    console.error('Like error:', err);
-                });
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) window.location.reload();
+                else alert(data.error || 'เกิดข้อผิดพลาด');
+            })
+            .catch(function() { alert('เกิดข้อผิดพลาด'); });
         }
 
-        // Tags scroll
-        function scrollTags(btn, dir) {
-            var wrapper = btn.closest('.project-tags-wrapper');
-            var tags = wrapper.querySelector('.project-tags');
-            tags.scrollBy({ left: dir * 80, behavior: 'smooth' });
+        function toggleLike(btn, postId) {
+            fetch('/post/' + postId + '/like', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function(res) {
+                if (res.status === 401) { window.location.href = '/login'; return; }
+                return res.json();
+            })
+            .then(function(data) {
+                if (!data) return;
+                var card = btn.closest('.post-card');
+                var statEl = card.querySelector('.post-stat');
+                statEl.textContent = data.likes + ' ถูกใจ';
+                if (data.liked) btn.classList.add('liked'); else btn.classList.remove('liked');
+            });
         }
 
-        document.querySelectorAll('.project-tags-wrapper').forEach(function(wrapper) {
-            var tags = wrapper.querySelector('.project-tags');
-            var leftArr = wrapper.querySelector('.tags-arrow-left');
-            var rightArr = wrapper.querySelector('.tags-arrow-right');
+        function toggleComments(postId) {
+            var section = document.getElementById('comments-' + postId);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
 
-            function updateArrows() {
-                leftArr.disabled = tags.scrollLeft <= 0;
-                rightArr.disabled = tags.scrollLeft >= tags.scrollWidth - tags.clientWidth - 1;
-            }
+        function submitComment(input, postId) {
+            var content = input.value.trim();
+            if (!content) return;
+            var anonCheckbox = input.closest('.comment-form').querySelector('.comment-anon-checkbox');
+            var isAnonymous = anonCheckbox ? anonCheckbox.checked : false;
 
-            updateArrows();
-            tags.addEventListener('scroll', updateArrows);
-            new ResizeObserver(updateArrows).observe(tags);
-        });
-
-        // Projects slider
-        (function() {
-            var grid = document.getElementById('projectsGrid');
-            if (!grid) return;
-
-            var cards = grid.querySelectorAll('.project-card');
-            var dotsContainer = document.getElementById('projectsDots');
-            var prevBtn = document.getElementById('projectsPrev');
-            var nextBtn = document.getElementById('projectsNext');
-            var perPage = 3;
-            var currentPage = 0;
-            var animating = false;
-
-            function isMobile() {
-                return window.innerWidth <= 768;
-            }
-
-            function getTotalPages() {
-                return Math.ceil(cards.length / perPage);
-            }
-
-            function buildDots() {
-                dotsContainer.innerHTML = '';
-                var total = getTotalPages();
-                for (var i = 0; i < total; i++) {
-                    var dot = document.createElement('button');
-                    dot.className = 'projects-dot' + (i === currentPage ? ' active' : '');
-                    dot.setAttribute('data-page', i);
-                    dot.onclick = function() { goToPage(parseInt(this.dataset.page)); };
-                    dotsContainer.appendChild(dot);
+            fetch('/comment/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: postId, content: content, isAnonymous: isAnonymous })
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var list = document.getElementById('comments-list-' + postId);
+                    var c = data.comment;
+                    var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
+                    var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
+                    var html = '<div class="comment" data-id="' + c._id + '">' + avatarHtml + '<div class="comment-body"><div class="comment-bubble"><span class="comment-author">' + name + '</span><span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span></div><div class="comment-meta"><span class="comment-time">เมื่อสักครู่</span><button class="comment-delete" onclick="deleteComment(\'' + c._id + '\',\'' + postId + '\')">ลบ</button></div></div></div>';
+                    list.insertAdjacentHTML('beforeend', html);
+                    input.value = '';
+                    var card = document.querySelector('[data-id="' + postId + '"]');
+                    var stats = card.querySelectorAll('.post-stat');
+                    if (stats[1]) { stats[1].textContent = (parseInt(stats[1].textContent) + 1) + ' ความคิดเห็น'; }
                 }
-            }
+            });
+        }
 
-            function updateNav() {
-                var total = getTotalPages();
-                prevBtn.disabled = currentPage === 0;
-                nextBtn.disabled = currentPage >= total - 1;
-                var dots = dotsContainer.querySelectorAll('.projects-dot');
-                dots.forEach(function(d, i) {
-                    d.classList.toggle('active', i === currentPage);
+        function deleteComment(commentId, postId) {
+            if (!confirm('ลบความคิดเห็นนี้?')) return;
+            fetch('/comment/' + commentId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var el = document.querySelector('.comment[data-id="' + commentId + '"]');
+                    if (el) el.remove();
+                    var card = document.querySelector('[data-id="' + postId + '"]');
+                    var stats = card.querySelectorAll('.post-stat');
+                    if (stats[1]) { stats[1].textContent = Math.max(0, parseInt(stats[1].textContent) - 1) + ' ความคิดเห็น'; }
+                }
+            });
+        }
+
+        function deletePost(postId) {
+            if (!confirm('ลบโพสต์นี้?')) return;
+            fetch('/post/' + postId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var el = document.querySelector('.post-card[data-id="' + postId + '"]');
+                    if (el) el.remove();
+                }
+            });
+        }
+
+        function loadAllComments(postId) {
+            fetch('/comments/' + postId)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var list = document.getElementById('comments-list-' + postId);
+                list.innerHTML = '';
+                data.comments.forEach(function(c) {
+                    var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
+                    var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
+                    var time = new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+                    list.insertAdjacentHTML('beforeend', '<div class="comment" data-id="' + c._id + '">' + avatarHtml + '<div class="comment-body"><div class="comment-bubble"><span class="comment-author">' + name + '</span><span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span></div><div class="comment-meta"><span class="comment-time">' + time + '</span></div></div></div>');
                 });
-            }
-
-            function showMobilePage(page, animate) {
-                var start = page * perPage;
-                var end = start + perPage;
-
-                if (!animate) {
-                    cards.forEach(function(card, i) {
-                        card.classList.remove('mobile-hidden', 'mobile-slide-out', 'mobile-slide-in');
-                        if (i >= start && i < end) {
-                            card.style.display = '';
-                        } else {
-                            card.classList.add('mobile-hidden');
-                        }
-                    });
-                    return;
-                }
-
-                animating = true;
-
-                // Slide out visible cards
-                cards.forEach(function(card) {
-                    if (!card.classList.contains('mobile-hidden')) {
-                        card.classList.add('mobile-slide-out');
-                    }
-                });
-
-                setTimeout(function() {
-                    // Hide all, show new page with slide-in
-                    cards.forEach(function(card, i) {
-                        card.classList.remove('mobile-slide-out');
-                        if (i >= start && i < end) {
-                            card.classList.remove('mobile-hidden');
-                            card.classList.add('mobile-slide-in');
-                        } else {
-                            card.classList.add('mobile-hidden');
-                            card.classList.remove('mobile-slide-in');
-                        }
-                    });
-
-                    // Trigger reflow then remove slide-in
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
-                            cards.forEach(function(card) {
-                                card.classList.remove('mobile-slide-in');
-                            });
-                            animating = false;
-                        });
-                    });
-                }, 500);
-            }
-
-            function goToPage(page) {
-                if (animating) return;
-                var total = getTotalPages();
-                if (page < 0 || page >= total) return;
-                var oldPage = currentPage;
-                currentPage = page;
-
-                if (isMobile()) {
-                    showMobilePage(page, oldPage !== page);
-                } else {
-                    var cardWidth = cards[0].offsetWidth;
-                    var gap = 24;
-                    var offset = currentPage * perPage * (cardWidth + gap);
-                    grid.scrollTo({ left: offset, behavior: 'smooth' });
-                }
-                updateNav();
-            }
-
-            window.slideProjects = function(dir) {
-                goToPage(currentPage + dir);
-            };
-
-            function onResize() {
-                perPage = 3;
-                var total = getTotalPages();
-                if (currentPage >= total) currentPage = total - 1;
-                if (currentPage < 0) currentPage = 0;
-                buildDots();
-                updateNav();
-
-                if (cards.length <= perPage) {
-                    grid.classList.add('few-cards');
-                } else {
-                    grid.classList.remove('few-cards');
-                }
-
-                if (isMobile()) {
-                    showMobilePage(currentPage, false);
-                } else {
-                    // Reset mobile classes
-                    cards.forEach(function(card) {
-                        card.classList.remove('mobile-hidden', 'mobile-slide-out', 'mobile-slide-in');
-                        card.style.display = '';
-                    });
-                }
-            }
-
-            function checkNav() {
-                var nav = document.querySelector('.projects-nav');
-                if (nav) {
-                    nav.style.display = cards.length <= perPage ? 'none' : 'flex';
-                }
-            }
-
-            onResize();
-            checkNav();
-            window.addEventListener('resize', function() { onResize(); checkNav(); });
-        })();
+            });
+        }
     </script>
 
 </body>

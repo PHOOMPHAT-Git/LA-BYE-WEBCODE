@@ -1,7 +1,8 @@
 const express = require('express');
-const Project = require('../models/Project');
+const Post = require('../models/Post');
 const User = require('../models/User');
 const Visit = require('../models/Visit');
+const Comment = require('../models/Comment');
 
 const router = express.Router();
 
@@ -18,71 +19,32 @@ function isAdmin(req, res, next) {
 router.get('/manage', isAdmin, async (req, res) => {
     const today = new Date().toISOString().slice(0, 10);
 
-    const [projects, totalUsers, todayVisit, allVisits] = await Promise.all([
-        Project.find().sort({ sort_order: 1, created_at: -1 }),
+    const [posts, totalUsers, todayVisit, allVisits, totalComments] = await Promise.all([
+        Post.find().populate('author', 'username displayName').sort({ created_at: -1 }),
         User.countDocuments(),
         Visit.findOne({ date: today }),
-        Visit.find().sort({ date: 1 })
+        Visit.find().sort({ date: 1 }),
+        Comment.countDocuments()
     ]);
 
     const totalVisits = allVisits.reduce((sum, v) => sum + v.count, 0);
 
     res.render('manage', {
         user: req.session.user,
-        projects,
+        posts,
         totalUsers,
         todayVisits: todayVisit ? todayVisit.count : 0,
         totalVisits,
+        totalComments,
         visits: JSON.stringify(allVisits)
     });
 });
 
-// Add project
-router.post('/manage/add', isAdmin, async (req, res) => {
-    const { title, description, tags, demo } = req.body;
-
-    const tagArray = tags ? (Array.isArray(tags) ? tags : [tags]) : ['No Tag'];
-
-    await Project.create({
-        title: title || 'Project',
-        description: description || 'A brief description of project. What it does, what technologies were used, and what problem it solves.',
-        tags: tagArray,
-        demo
-    });
+// Delete post (admin)
+router.post('/manage/post/delete/:id', isAdmin, async (req, res) => {
+    await Comment.deleteMany({ post: req.params.id });
+    await Post.findByIdAndDelete(req.params.id);
     res.redirect('/manage');
-});
-
-// Edit project
-router.post('/manage/edit/:id', isAdmin, async (req, res) => {
-    const { title, description, tags, demo } = req.body;
-
-    const tagArray = tags ? (Array.isArray(tags) ? tags : [tags]) : ['No Tag'];
-
-    await Project.findByIdAndUpdate(req.params.id, {
-        title: title || 'Project',
-        description: description || 'A brief description of project. What it does, what technologies were used, and what problem it solves.',
-        tags: tagArray,
-        demo,
-        updated_at: new Date()
-    });
-    res.redirect('/manage');
-});
-
-// Reorder projects
-router.post('/manage/reorder', isAdmin, async (req, res) => {
-    try {
-        const { order } = req.body;
-        if (!Array.isArray(order)) return res.status(400).json({ error: 'Invalid' });
-
-        const updates = order.map((id, index) =>
-            Project.findByIdAndUpdate(id, { sort_order: index })
-        );
-        await Promise.all(updates);
-        res.json({ success: true });
-    } catch (err) {
-        console.error('Reorder error:', err);
-        res.status(500).json({ error: 'Server error' });
-    }
 });
 
 // Dashboard daily stats API
@@ -91,23 +53,17 @@ router.get('/manage/stats/:date', isAdmin, async (req, res) => {
         const date = req.params.date;
         const visit = await Visit.findOne({ date });
         const usersOnDate = await User.countDocuments({ created_at: { $lte: new Date(date + 'T23:59:59.999Z') } });
-        const projectsOnDate = await Project.countDocuments({ created_at: { $lte: new Date(date + 'T23:59:59.999Z') } });
+        const postsOnDate = await Post.countDocuments({ created_at: { $lte: new Date(date + 'T23:59:59.999Z') } });
 
         res.json({
             date,
             visits: visit ? visit.count : 0,
             users: usersOnDate,
-            projects: projectsOnDate
+            posts: postsOnDate
         });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }
-});
-
-// Delete project
-router.post('/manage/delete/:id', isAdmin, async (req, res) => {
-    await Project.findByIdAndDelete(req.params.id);
-    res.redirect('/manage');
 });
 
 module.exports = router;

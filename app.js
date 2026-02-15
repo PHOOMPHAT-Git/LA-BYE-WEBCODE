@@ -9,6 +9,8 @@ const Visit = require('./src/models/Visit');
 const indexRoutes = require('./src/routes/index');
 const authRoutes = require('./src/routes/auth');
 const manageRoutes = require('./src/routes/manage');
+const commentRoutes = require('./src/routes/comment');
+const profileRoutes = require('./src/routes/profile');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,8 +23,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/pages'));
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Session (24 hours) - stored in MongoDB
@@ -51,6 +53,8 @@ app.use(async (req, res, next) => {
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', manageRoutes);
+app.use('/', commentRoutes);
+app.use('/', profileRoutes);
 
 // Start server
 app.listen(PORT, () => {

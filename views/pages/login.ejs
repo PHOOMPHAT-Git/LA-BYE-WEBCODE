@@ -3,47 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Portfolio</title>
+    <title>เข้าสู่ระบบ - La Bye</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/components/scrollbar.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <script src="/js/security.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap">
 </head>
-<body>
-
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="/" class="nav-logo">Portfolio</a>
-            <button class="nav-hamburger" onclick="this.classList.toggle('active');document.querySelector('.nav-menu-mobile').classList.toggle('open');document.body.classList.toggle('menu-open')">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="nav-menu nav-menu-desktop">
-                <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                </ul>
-                <div class="nav-divider"></div>
-                <ul class="nav-links nav-auth">
-                    <li><a href="/register">Register</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="nav-menu nav-menu-mobile">
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-        </ul>
-        <div class="nav-divider"></div>
-        <ul class="nav-links nav-auth">
-            <li><a href="/register">Register</a></li>
-        </ul>
-    </div>
+<body class="auth-body">
 
     <div class="auth-page">
+        <div class="auth-brand">
+            <a href="/" class="auth-logo">La Bye</a>
+            <p class="auth-tagline">พื้นที่สำหรับระบายความรู้สึก<br>โพสต์ได้อย่างอิสระ ไม่มีใครตัดสิน</p>
+        </div>
         <div class="auth-card">
-            <h1 class="auth-title">Welcome Back</h1>
-            <p class="auth-subtitle">Login to your account.</p>
+            <h1 class="auth-title">เข้าสู่ระบบ</h1>
 
             <% if (error) { %>
                 <div class="auth-error"><%= error %></div>
@@ -51,20 +23,19 @@
 
             <form action="/login" method="POST" class="auth-form">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" placeholder="อีเมล" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="รหัสผ่าน" required>
                 </div>
-                <button type="submit" class="btn btn-primary auth-btn">Login</button>
+                <button type="submit" class="btn btn-primary auth-btn">เข้าสู่ระบบ</button>
             </form>
 
-            <p class="auth-footer">Don't have an account? <a href="/register">Register</a></p>
+            <div class="auth-divider"><span>หรือ</span></div>
+
+            <a href="/register" class="btn btn-success auth-create-btn">สร้างบัญชีใหม่</a>
         </div>
     </div>
 
-    <script>window.scrollTo(0, 0);</script>
 </body>
 </html>
