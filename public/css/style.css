@@ -1749,6 +1749,13 @@ a {
 
     .modal-comment-form {
         padding: 12px 16px;
+        /* Add padding for mobile navigation bars */
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 20px));
+    }
+
+    /* Fix modal body height to prevent comment form from being hidden */
+    .modal-comments-body {
+        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     }
 }
 
