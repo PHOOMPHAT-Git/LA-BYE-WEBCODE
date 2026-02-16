@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Bye - ระบายใจ</title>
+    <title>Labye // ลาบาย</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/components/scrollbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap">
@@ -13,16 +13,12 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-content">
-            <a href="/" class="nav-logo">La Bye</a>
+            <a href="/" class="nav-logo">La bye</a>
             <div class="nav-menu">
                 <% if (user) { %>
                     <a href="/" class="nav-link active">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         <span>หน้าแรก</span>
-                    </a>
-                    <a href="/profile" class="nav-link">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        <span>โปรไฟล์</span>
                     </a>
                     <div class="nav-user">
                         <button class="nav-user-btn" onclick="this.parentElement.classList.toggle('open')">
@@ -39,12 +35,6 @@
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 โปรไฟล์ของฉัน
                             </a>
-                            <% if (user.email === 'phomphat385@gmail.com') { %>
-                                <a href="/manage">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                                    จัดการระบบ
-                                </a>
-                            <% } %>
                             <div class="nav-dropdown-divider"></div>
                             <a href="/logout">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -75,16 +65,6 @@
                     <% } %>
                     <button class="create-post-input" onclick="openCreatePost()">คุณรู้สึกอย่างไร...</button>
                 </div>
-                <div class="create-post-actions">
-                    <button class="create-post-action" onclick="openCreatePost()">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#43a047" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        รูปภาพ
-                    </button>
-                    <button class="create-post-action" onclick="openCreatePost()">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#e53935" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                        ระบายใจ
-                    </button>
-                </div>
             </div>
             <% } else { %>
             <div class="card login-prompt-card">
@@ -101,7 +81,11 @@
                 <% posts.forEach(function(post) { %>
                 <div class="card post-card" data-id="<%= post._id %>">
                     <div class="post-header">
+                        <% if (!post.isAnonymous && post.author && post.author.username) { %>
+                        <div class="post-author post-author-clickable" onclick="openProfileModal('<%= post.author.username %>')">
+                        <% } else { %>
                         <div class="post-author">
+                        <% } %>
                             <% if (post.isAnonymous) { %>
                                 <div class="avatar avatar-md avatar-anonymous">?</div>
                             <% } else if (post.author && post.author.avatar) { %>
@@ -121,9 +105,21 @@
                             </div>
                         </div>
                         <% if (user && (post.author && post.author._id && post.author._id.toString() === user.id.toString() || user.email === 'phomphat385@gmail.com')) { %>
-                        <button class="post-menu-btn" onclick="deletePost('<%= post._id %>')">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
+                        <div class="post-menu">
+                            <button class="post-menu-btn" onclick="togglePostMenu(this)">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div class="post-menu-dropdown">
+                                <button onclick="openEditPost('<%= post._id %>', this)">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    แก้ไขโพสต์
+                                </button>
+                                <button class="danger" onclick="deletePost('<%= post._id %>')">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    ลบโพสต์
+                                </button>
+                            </div>
+                        </div>
                         <% } %>
                     </div>
 
@@ -154,7 +150,12 @@
                     </div>
 
                     <!-- Comments Section -->
-                    <div class="comments-section" id="comments-<%= post._id %>" style="display: none;">
+                    <div class="comments-section" id="comments-<%= post._id %>">
+                        <div class="comment-filters" data-post-id="<%= post._id %>">
+                            <button class="comment-filter-btn active" onclick="filterComments(this, '<%= post._id %>', 'oldest')">เก่าสุด</button>
+                            <button class="comment-filter-btn" onclick="filterComments(this, '<%= post._id %>', 'newest')">ใหม่สุด</button>
+                            <button class="comment-filter-btn" onclick="filterComments(this, '<%= post._id %>', 'popular')">นิยม</button>
+                        </div>
                         <div class="comments-list" id="comments-list-<%= post._id %>">
                             <% if (post.comments && post.comments.length > 0) { %>
                                 <% post.comments.forEach(function(comment) { %>
@@ -169,14 +170,27 @@
                                     <div class="comment-body">
                                         <div class="comment-bubble">
                                             <span class="comment-author"><%= comment.isAnonymous ? 'ไม่ระบุตัวตน' : (comment.author ? (comment.author.displayName || comment.author.username) : 'ผู้ใช้ที่ถูกลบ') %></span>
-                                            <span class="comment-text"><%= comment.content %></span>
+                                            <% if (comment.content) { %>
+                                                <span class="comment-text"><%= comment.content %></span>
+                                            <% } %>
                                         </div>
+                                        <% if (comment.image) { %>
+                                            <div class="comment-image"><img src="<%= comment.image %>" alt="" loading="lazy"></div>
+                                        <% } %>
                                         <div class="comment-meta">
+                                            <button class="comment-like-btn<%= user && comment.likedBy && comment.likedBy.some(function(id) { return id.toString() === user.id.toString(); }) ? ' liked' : '' %>" onclick="likeComment(this, '<%= comment._id %>')"><%= comment.likes || 0 %> ถูกใจ</button>
+                                            <% if (user) { %>
+                                                <button class="comment-reply-btn" onclick="toggleReplyForm(this, '<%= comment._id %>', '<%= post._id %>')">ตอบกลับ</button>
+                                            <% } %>
                                             <span class="comment-time"><%= new Date(comment.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
                                             <% if (user && (comment.author && comment.author._id && comment.author._id.toString() === user.id.toString() || user.email === 'phomphat385@gmail.com')) { %>
                                                 <button class="comment-delete" onclick="deleteComment('<%= comment._id %>', '<%= post._id %>')">ลบ</button>
                                             <% } %>
                                         </div>
+                                        <% if (comment.replyCount > 0) { %>
+                                            <button class="load-replies-btn" onclick="loadReplies(this, '<%= comment._id %>', '<%= post._id %>')">ดูการตอบกลับ (<%= comment.replyCount %>)</button>
+                                        <% } %>
+                                        <div class="replies-container" id="replies-<%= comment._id %>"></div>
                                     </div>
                                 </div>
                                 <% }) %>
@@ -187,7 +201,7 @@
                         </div>
 
                         <% if (user) { %>
-                        <div class="comment-form">
+                        <div class="comment-form" data-post-id="<%= post._id %>">
                             <% if (user.avatar) { %>
                                 <img src="<%= user.avatar %>" alt="" class="avatar avatar-sm">
                             <% } else { %>
@@ -195,10 +209,22 @@
                             <% } %>
                             <div class="comment-input-wrapper">
                                 <input type="text" class="comment-input" placeholder="เขียนความคิดเห็น..." onkeydown="if(event.key==='Enter')submitComment(this,'<%= post._id %>')">
-                                <label class="comment-anon-toggle">
-                                    <input type="checkbox" class="comment-anon-checkbox">
-                                    <span class="comment-anon-label">ไม่ระบุตัวตน</span>
-                                </label>
+                                <div class="comment-form-actions">
+                                    <label class="comment-attach-btn" title="แนบรูป">
+                                        <input type="file" accept="image/*" onchange="previewCommentImage(this, '<%= post._id %>')" style="display:none;">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    </label>
+                                    <label class="comment-anon-toggle">
+                                        <input type="checkbox" class="comment-anon-checkbox">
+                                        <span class="comment-anon-label">ไม่ระบุตัวตน</span>
+                                    </label>
+                                </div>
+                                <div class="comment-image-preview" id="comment-img-preview-<%= post._id %>" style="display:none;">
+                                    <img src="" alt="">
+                                    <button type="button" class="comment-img-remove" onclick="removeCommentImage('<%= post._id %>')">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <% } %>
@@ -241,7 +267,7 @@
                         </div>
                     <% } %>
                 </div>
-                <textarea class="create-post-textarea" id="postContent" placeholder="คุณรู้สึกอย่างไร... ระบายออกมาเลย" rows="5"></textarea>
+                <textarea class="create-post-textarea" id="postContent" placeholder="คุณรู้สึกอย่างไร... ระบายออกมาเลย" rows="5" oninput="updateSubmitBtn()"></textarea>
                 <div class="create-post-preview" id="imagePreview" style="display: none;">
                     <img id="previewImg" src="" alt="">
                     <button class="remove-image" onclick="removeImage()">
@@ -256,18 +282,134 @@
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#43a047" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                     </label>
                 </div>
-                <button class="btn btn-primary" onclick="submitPost()">ระบาย</button>
+                <button class="btn btn-primary" id="submitPostBtn" onclick="submitPost()" disabled>ระบาย</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div class="modal" id="editPostModal">
+        <div class="modal-overlay" onclick="closeEditPost()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>แก้ไขโพสต์</h2>
+                <button class="modal-close" onclick="closeEditPost()">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea class="create-post-textarea" id="editPostContent" placeholder="แก้ไขข้อความ..." rows="5"></textarea>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-footer-left"></div>
+                <button class="btn btn-primary" onclick="saveEditPost()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal confirm-modal" id="confirmModal">
+        <div class="modal-overlay" onclick="closeConfirm()"></div>
+        <div class="modal-content">
+            <div class="confirm-body">
+                <div class="confirm-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </div>
+                <h3 class="confirm-title" id="confirmTitle">ยืนยันการลบ</h3>
+                <p class="confirm-text" id="confirmText">คุณแน่ใจหรือไม่ว่าต้องการลบ?</p>
+            </div>
+            <div class="confirm-actions">
+                <button class="btn btn-outline" onclick="closeConfirm()">ยกเลิก</button>
+                <button class="btn btn-danger" id="confirmBtn" onclick="confirmAction()">ลบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal comments-modal" id="commentsModal">
+        <div class="modal-overlay" onclick="closeCommentsModal()"></div>
+        <div class="modal-content">
+            <div id="commentsModalContent">
+                <!-- Dynamic content will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal profile-modal" id="profileModal">
+        <div class="modal-overlay" onclick="closeProfileModal()"></div>
+        <div class="modal-content">
+            <div id="profileModalContent">
+                <!-- Dynamic content will be rendered here -->
             </div>
         </div>
     </div>
 
     <script>
+        // Global user data for modal
+        <% if (user) { %>
+        var currentUser = {
+            id: '<%= user.id %>',
+            username: '<%= user.username %>',
+            displayName: '<%= user.displayName || user.username %>',
+            avatar: '<%= user.avatar || "" %>',
+            email: '<%= user.email %>'
+        };
+        <% } else { %>
+        var currentUser = null;
+        <% } %>
+
+        // Page load fade
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.remove('loaded');
+            setTimeout(function() {
+                document.body.classList.add('loaded');
+            }, 10);
+        });
+
+        // Confirm modal
+        var pendingConfirmCallback = null;
+
+        function showConfirm(title, text, callback) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmText').textContent = text;
+            pendingConfirmCallback = callback;
+            document.getElementById('confirmModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirmModal').classList.remove('open');
+            document.body.style.overflow = '';
+            pendingConfirmCallback = null;
+        }
+
+        function confirmAction() {
+            var cb = pendingConfirmCallback;
+            closeConfirm();
+            if (cb) cb();
+        }
+
+        // Close dropdowns on outside click
         document.addEventListener('click', function(e) {
             document.querySelectorAll('.nav-user').forEach(function(el) {
                 if (!el.contains(e.target)) el.classList.remove('open');
             });
+            document.querySelectorAll('.post-menu').forEach(function(el) {
+                if (!el.contains(e.target)) el.classList.remove('open');
+            });
         });
 
+        // Post menu (3 dots)
+        function togglePostMenu(btn) {
+            var menu = btn.closest('.post-menu');
+            document.querySelectorAll('.post-menu').forEach(function(el) {
+                if (el !== menu) el.classList.remove('open');
+            });
+            menu.classList.toggle('open');
+        }
+
+        // Create post modal
         function openCreatePost() {
             document.getElementById('createPostModal').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -285,6 +427,13 @@
             nameEl.textContent = isAnon ? 'ไม่ระบุตัวตน' : '<%= user ? (user.displayName || user.username) : "" %>';
         }
 
+        // Submit button lock
+        function updateSubmitBtn() {
+            var content = document.getElementById('postContent').value.trim();
+            var btn = document.getElementById('submitPostBtn');
+            btn.disabled = !content && !imageBase64;
+        }
+
         var imageBase64 = '';
 
         function previewImage(input) {
@@ -294,6 +443,7 @@
                     imageBase64 = e.target.result;
                     document.getElementById('previewImg').src = imageBase64;
                     document.getElementById('imagePreview').style.display = 'block';
+                    updateSubmitBtn();
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -303,12 +453,13 @@
             imageBase64 = '';
             document.getElementById('postImage').value = '';
             document.getElementById('imagePreview').style.display = 'none';
+            updateSubmitBtn();
         }
 
         function submitPost() {
             var content = document.getElementById('postContent').value.trim();
             var isAnonymous = document.getElementById('postAnonymous').checked;
-            if (!content && !imageBase64) return alert('กรุณาเขียนข้อความหรือแนบรูป');
+            if (!content && !imageBase64) return;
 
             fetch('/post/create', {
                 method: 'POST',
@@ -318,11 +469,50 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) window.location.reload();
-                else alert(data.error || 'เกิดข้อผิดพลาด');
-            })
-            .catch(function() { alert('เกิดข้อผิดพลาด'); });
+            });
         }
 
+        // Edit post
+        var editingPostId = '';
+
+        function openEditPost(postId, btn) {
+            btn.closest('.post-menu').classList.remove('open');
+            var card = document.querySelector('.post-card[data-id="' + postId + '"]');
+            var contentEl = card.querySelector('.post-content');
+            var text = contentEl ? contentEl.textContent : '';
+            editingPostId = postId;
+            document.getElementById('editPostContent').value = text;
+            document.getElementById('editPostModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditPost() {
+            document.getElementById('editPostModal').classList.remove('open');
+            document.body.style.overflow = '';
+            editingPostId = '';
+        }
+
+        function saveEditPost() {
+            var content = document.getElementById('editPostContent').value.trim();
+            if (!editingPostId) return;
+
+            fetch('/post/' + editingPostId + '/edit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: content })
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var card = document.querySelector('.post-card[data-id="' + editingPostId + '"]');
+                    var contentEl = card.querySelector('.post-content');
+                    if (contentEl) contentEl.textContent = content;
+                    closeEditPost();
+                }
+            });
+        }
+
+        // Like post
         function toggleLike(btn, postId) {
             fetch('/post/' + postId + '/like', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
             .then(function(res) {
@@ -339,31 +529,67 @@
         }
 
         function toggleComments(postId) {
-            var section = document.getElementById('comments-' + postId);
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+            // Open comments modal instead of inline expansion
+            openCommentsModal(postId);
         }
 
-        function submitComment(input, postId) {
+        // Comment images
+        var commentImages = {};
+
+        function previewCommentImage(input, postId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    commentImages[postId] = e.target.result;
+                    var preview = document.getElementById('comment-img-preview-' + postId);
+                    preview.querySelector('img').src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeCommentImage(postId) {
+            delete commentImages[postId];
+            var preview = document.getElementById('comment-img-preview-' + postId);
+            preview.style.display = 'none';
+            preview.querySelector('img').src = '';
+            var form = document.querySelector('.comment-form[data-post-id="' + postId + '"]');
+            var fileInput = form.querySelector('input[type="file"]');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function submitComment(input, postId, parentId) {
             var content = input.value.trim();
-            if (!content) return;
-            var anonCheckbox = input.closest('.comment-form').querySelector('.comment-anon-checkbox');
+            var image = commentImages[postId] || '';
+            if (!content && !image) return;
+            var form = input.closest('.comment-form');
+            var anonCheckbox = form.querySelector('.comment-anon-checkbox');
             var isAnonymous = anonCheckbox ? anonCheckbox.checked : false;
+
+            var body = { postId: postId, content: content, image: image, isAnonymous: isAnonymous };
+            if (parentId) body.parentId = parentId;
 
             fetch('/comment/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ postId: postId, content: content, isAnonymous: isAnonymous })
+                body: JSON.stringify(body)
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    var list = document.getElementById('comments-list-' + postId);
                     var c = data.comment;
-                    var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
-                    var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
-                    var html = '<div class="comment" data-id="' + c._id + '">' + avatarHtml + '<div class="comment-body"><div class="comment-bubble"><span class="comment-author">' + name + '</span><span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span></div><div class="comment-meta"><span class="comment-time">เมื่อสักครู่</span><button class="comment-delete" onclick="deleteComment(\'' + c._id + '\',\'' + postId + '\')">ลบ</button></div></div></div>';
-                    list.insertAdjacentHTML('beforeend', html);
-                    input.value = '';
+                    if (parentId) {
+                        var repliesContainer = document.getElementById('replies-' + parentId);
+                        repliesContainer.insertAdjacentHTML('beforeend', buildCommentHtml(c, postId, true, true));
+                        var replyForm = form.closest('.reply-form-wrapper');
+                        if (replyForm) replyForm.remove();
+                    } else {
+                        var list = document.getElementById('comments-list-' + postId);
+                        list.insertAdjacentHTML('beforeend', buildCommentHtml(c, postId, true, false));
+                        input.value = '';
+                        removeCommentImage(postId);
+                    }
                     var card = document.querySelector('[data-id="' + postId + '"]');
                     var stats = card.querySelectorAll('.post-stat');
                     if (stats[1]) { stats[1].textContent = (parseInt(stats[1].textContent) + 1) + ' ความคิดเห็น'; }
@@ -371,46 +597,789 @@
             });
         }
 
-        function deleteComment(commentId, postId) {
-            if (!confirm('ลบความคิดเห็นนี้?')) return;
-            fetch('/comment/' + commentId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
-            .then(function(res) { return res.json(); })
+        function likeComment(btn, commentId) {
+            fetch('/comment/' + commentId + '/like', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function(res) {
+                if (res.status === 401) { window.location.href = '/login'; return; }
+                return res.json();
+            })
             .then(function(data) {
-                if (data.success) {
-                    var el = document.querySelector('.comment[data-id="' + commentId + '"]');
-                    if (el) el.remove();
-                    var card = document.querySelector('[data-id="' + postId + '"]');
-                    var stats = card.querySelectorAll('.post-stat');
-                    if (stats[1]) { stats[1].textContent = Math.max(0, parseInt(stats[1].textContent) - 1) + ' ความคิดเห็น'; }
-                }
+                if (!data) return;
+                if (data.liked) btn.classList.add('liked'); else btn.classList.remove('liked');
+                btn.textContent = data.likes + ' ถูกใจ';
+            });
+        }
+
+        function buildCommentHtml(c, postId, canDelete, isReply) {
+            var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
+            var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
+            var contentHtml = c.content ? '<span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' : '';
+            var imageHtml = c.image ? '<div class="comment-image"><img src="' + c.image + '" alt="" loading="lazy"></div>' : '';
+            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
+            var likes = c.likes || 0;
+            var liked = c.liked || false;
+            var deleteBtn = canDelete ? '<button class="comment-delete" onclick="deleteComment(\'' + c._id + '\',\'' + postId + '\')">ลบ</button>' : '';
+            var replyBtn = '<button class="comment-reply-btn" onclick="toggleReplyForm(this,\'' + c._id + '\',\'' + postId + '\')">ตอบกลับ</button>';
+            var replyCount = c.replyCount || 0;
+            var loadRepliesBtn = replyCount > 0 ? '<button class="load-replies-btn" onclick="loadReplies(this,\'' + c._id + '\',\'' + postId + '\')">ดูการตอบกลับ (' + replyCount + ')</button>' : '';
+            var cls = isReply ? 'comment comment-reply' : 'comment';
+            return '<div class="' + cls + '" data-id="' + c._id + '">' + avatarHtml + '<div class="comment-body"><div class="comment-bubble"><span class="comment-author">' + name + '</span>' + contentHtml + '</div>' + imageHtml + '<div class="comment-meta"><button class="comment-like-btn' + (liked ? ' liked' : '') + '" onclick="likeComment(this,\'' + c._id + '\')">' + likes + ' ถูกใจ</button>' + replyBtn + '<span class="comment-time">' + time + '</span>' + deleteBtn + '</div>' + loadRepliesBtn + '<div class="replies-container" id="replies-' + c._id + '"></div></div></div>';
+        }
+
+        function deleteComment(commentId, postId) {
+            showConfirm('ลบความคิดเห็น', 'คุณแน่ใจหรือไม่ว่าต้องการลบความคิดเห็นนี้?', function() {
+                fetch('/comment/' + commentId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        var el = document.querySelector('.comment[data-id="' + commentId + '"]');
+                        if (el) el.remove();
+                        var card = document.querySelector('[data-id="' + postId + '"]');
+                        var stats = card.querySelectorAll('.post-stat');
+                        if (stats[1]) { stats[1].textContent = Math.max(0, parseInt(stats[1].textContent) - 1) + ' ความคิดเห็น'; }
+                    }
+                });
             });
         }
 
         function deletePost(postId) {
-            if (!confirm('ลบโพสต์นี้?')) return;
-            fetch('/post/' + postId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    var el = document.querySelector('.post-card[data-id="' + postId + '"]');
-                    if (el) el.remove();
-                }
+            document.querySelectorAll('.post-menu').forEach(function(el) { el.classList.remove('open'); });
+            showConfirm('ลบโพสต์', 'คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้?', function() {
+                fetch('/post/' + postId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        var el = document.querySelector('.post-card[data-id="' + postId + '"]');
+                        if (el) el.remove();
+                    }
+                });
             });
         }
 
-        function loadAllComments(postId) {
-            fetch('/comments/' + postId)
+        function toggleReplyForm(btn, commentId, postId) {
+            var existing = document.querySelector('.reply-form-wrapper[data-parent="' + commentId + '"]');
+            if (existing) { existing.remove(); return; }
+            var userAvatar = '<div class="avatar avatar-sm avatar-default"><%= user ? (user.displayName || user.username).charAt(0) : "?" %></div>';
+            <% if (user && user.avatar) { %>
+            userAvatar = '<img src="<%= user.avatar %>" alt="" class="avatar avatar-sm">';
+            <% } %>
+            var html = '<div class="reply-form-wrapper" data-parent="' + commentId + '">' +
+                '<div class="comment-form" data-post-id="' + postId + '">' +
+                userAvatar +
+                '<div class="comment-input-wrapper">' +
+                '<input type="text" class="comment-input" placeholder="ตอบกลับ..." onkeydown="if(event.key===\'Enter\')submitComment(this,\'' + postId + '\',\'' + commentId + '\')">' +
+                '<div class="comment-form-actions"><label class="comment-anon-toggle"><input type="checkbox" class="comment-anon-checkbox"><span class="comment-anon-label">ไม่ระบุตัวตน</span></label></div>' +
+                '</div></div></div>';
+            var commentBody = btn.closest('.comment-body');
+            var repliesContainer = commentBody.querySelector('.replies-container');
+            repliesContainer.insertAdjacentHTML('beforebegin', html);
+            var replyInput = document.querySelector('.reply-form-wrapper[data-parent="' + commentId + '"] .comment-input');
+            if (replyInput) replyInput.focus();
+        }
+
+        function loadReplies(btn, commentId, postId) {
+            var container = document.getElementById('replies-' + commentId);
+            if (container.children.length > 0) {
+                // Toggle show/hide
+                var isHidden = container.style.display === 'none';
+                container.style.display = isHidden ? '' : 'none';
+                btn.textContent = isHidden ? 'ซ่อนการตอบกลับ' : btn.getAttribute('data-original-text') || 'ดูการตอบกลับ';
+                return;
+            }
+            btn.setAttribute('data-original-text', btn.textContent);
+            btn.textContent = 'กำลังโหลด...';
+            fetch('/comment/' + commentId + '/replies')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                container.innerHTML = '';
+                data.replies.forEach(function(c) {
+                    container.insertAdjacentHTML('beforeend', buildCommentHtml(c, postId, false, true));
+                });
+                btn.textContent = 'ซ่อนการตอบกลับ';
+            });
+        }
+
+        function loadAllComments(postId, sortType) {
+            var sort = sortType || 'oldest';
+            fetch('/comments/' + postId + '?sort=' + sort)
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 var list = document.getElementById('comments-list-' + postId);
                 list.innerHTML = '';
                 data.comments.forEach(function(c) {
-                    var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
-                    var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
-                    var time = new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-                    list.insertAdjacentHTML('beforeend', '<div class="comment" data-id="' + c._id + '">' + avatarHtml + '<div class="comment-body"><div class="comment-bubble"><span class="comment-author">' + name + '</span><span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span></div><div class="comment-meta"><span class="comment-time">' + time + '</span></div></div></div>');
+                    list.insertAdjacentHTML('beforeend', buildCommentHtml(c, postId, false, false));
                 });
             });
+        }
+
+        function filterComments(btn, postId, sortType) {
+            var filters = btn.parentElement.querySelectorAll('.comment-filter-btn');
+            filters.forEach(function(f) { f.classList.remove('active'); });
+            btn.classList.add('active');
+            loadAllComments(postId, sortType);
+        }
+
+        // ========== Comments Modal Stack System ==========
+
+        // Track animation timeouts for cleanup
+        var modalAnimationTimeouts = [];
+
+        // Modal Stack State Management
+        var commentModalStack = {
+            stack: [],
+            currentLevel: function() {
+                return this.stack.length - 1;
+            },
+            push: function(state) {
+                this.stack.push(state);
+            },
+            pop: function() {
+                return this.stack.pop();
+            },
+            getCurrent: function() {
+                return this.stack[this.stack.length - 1];
+            },
+            clear: function() {
+                this.stack = [];
+            },
+            isEmpty: function() {
+                return this.stack.length === 0;
+            }
+        };
+
+        // Open Comments Modal (Level 0)
+        function openCommentsModal(postId) {
+            var modal = document.getElementById('commentsModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            // Clear stack and push initial state
+            commentModalStack.clear();
+            commentModalStack.push({
+                level: 0,
+                type: 'comments',
+                postId: postId,
+                commentId: null,
+                parentCommentId: null,
+                data: [],
+                title: 'ความคิดเห็นทั้งหมด',
+                sortType: 'oldest'
+            });
+
+            // Show loading state with animation
+            renderCommentModal(false, true);
+
+            // Fetch comments
+            fetch('/comments/' + postId + '?sort=oldest')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    var current = commentModalStack.getCurrent();
+                    current.data = data.comments;
+                    renderCommentModal(false, false);
+                })
+                .catch(function(err) {
+                    console.error('Error loading comments:', err);
+                    renderCommentModal(true, false);
+                });
+        }
+
+        // Open Replies Modal (Level 1+)
+        function openRepliesModal(commentId, postId) {
+            var level = commentModalStack.currentLevel() + 1;
+
+            // Limit stack depth
+            if (level >= 3) {
+                alert('ไม่สามารถดูการตอบกลับที่ลึกกว่านี้ได้');
+                return;
+            }
+
+            // Push new level to stack
+            commentModalStack.push({
+                level: level,
+                type: 'replies',
+                postId: postId,
+                commentId: commentId,
+                parentCommentId: commentId,
+                data: [],
+                title: 'การตอบกลับ',
+                sortType: null
+            });
+
+            // Show loading state with animation
+            renderCommentModal(false, true);
+
+            // Fetch replies
+            fetch('/comment/' + commentId + '/replies')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    var current = commentModalStack.getCurrent();
+                    current.data = data.replies;
+                    renderCommentModal(false, false);
+                })
+                .catch(function(err) {
+                    console.error('Error loading replies:', err);
+                    renderCommentModal(true, false);
+                });
+        }
+
+        // Navigate Back in Modal Stack
+        function navigateModalBack() {
+            if (commentModalStack.currentLevel() <= 0) {
+                closeCommentsModal();
+                return;
+            }
+
+            commentModalStack.pop();
+            renderCommentModal(false, true);
+        }
+
+        // Close Comments Modal
+        function closeCommentsModal() {
+            // Clear all pending animation timeouts
+            modalAnimationTimeouts.forEach(function(timeoutId) {
+                clearTimeout(timeoutId);
+            });
+            modalAnimationTimeouts = [];
+
+            var modal = document.getElementById('commentsModal');
+            var content = document.getElementById('commentsModalContent');
+            var wrapper = content.querySelector('.modal-transition-wrapper');
+            var modalContent = document.querySelector('.comments-modal .modal-content');
+
+            // Remove slide animation class immediately (but keep other styles for smooth fade-out)
+            if (modalContent) {
+                modalContent.classList.remove('modal-content-slide');
+            }
+
+            // Start modal fade-out transition
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+            commentModalStack.clear();
+
+            // Clean up wrapper styles AFTER modal fade-out completes (350ms fade + 10ms buffer)
+            var cleanupTimeout = setTimeout(function() {
+                if (wrapper) {
+                    wrapper.style.transition = 'none';
+                    wrapper.style.height = 'auto';
+                    wrapper.style.overflow = '';
+                }
+            }, 360);
+            modalAnimationTimeouts.push(cleanupTimeout);
+        }
+
+        // Render Comment Modal Content
+        function renderCommentModal(hasError, shouldAnimate) {
+            var current = commentModalStack.getCurrent();
+            if (!current) {
+                closeCommentsModal();
+                return;
+            }
+
+            var content = document.getElementById('commentsModalContent');
+            var level = current.level;
+            var showBackBtn = level > 0;
+
+            // Get or create transition wrapper
+            var wrapper = content.querySelector('.modal-transition-wrapper');
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'modal-transition-wrapper';
+                wrapper.style.width = '100%';
+                content.appendChild(wrapper);
+            }
+
+            // Store current height before content change
+            var oldHeight = wrapper.scrollHeight || 0;
+
+            // Build header
+            var headerHtml = '<div class="modal-header">';
+            headerHtml += '<div class="modal-header-back">';
+            if (showBackBtn) {
+                headerHtml += '<button class="modal-back-btn" onclick="navigateModalBack()" title="ย้อนกลับ">';
+                headerHtml += '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>';
+                headerHtml += '</button>';
+            }
+            headerHtml += '<h2>' + current.title + '</h2>';
+            headerHtml += '</div>';
+            headerHtml += '<button class="modal-close" onclick="closeCommentsModal()">';
+            headerHtml += '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
+            headerHtml += '</button>';
+            headerHtml += '</div>';
+
+            // Build filters (only for level 0)
+            var filtersHtml = '';
+            if (level === 0) {
+                filtersHtml = '<div class="comment-filters" style="padding: 8px 20px 8px; border-bottom: 1px solid #e4e6eb;">';
+                filtersHtml += '<button class="comment-filter-btn' + (current.sortType === 'oldest' ? ' active' : '') + '" onclick="filterModalComments(\'oldest\')">เก่าสุด</button>';
+                filtersHtml += '<button class="comment-filter-btn' + (current.sortType === 'newest' ? ' active' : '') + '" onclick="filterModalComments(\'newest\')">ใหม่สุด</button>';
+                filtersHtml += '<button class="comment-filter-btn' + (current.sortType === 'popular' ? ' active' : '') + '" onclick="filterModalComments(\'popular\')">นิยม</button>';
+                filtersHtml += '</div>';
+            }
+
+            // Build body content
+            var bodyHtml = '<div class="modal-comments-body">';
+
+            if (hasError) {
+                bodyHtml += '<div class="modal-empty">';
+                bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+                bodyHtml += '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                bodyHtml += '</div>';
+            } else if (!current.data || current.data.length === 0) {
+                if (current.data) {
+                    bodyHtml += '<div class="modal-empty">';
+                    bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+                    bodyHtml += '<p>' + (level === 0 ? 'ยังไม่มีความคิดเห็น' : 'ยังไม่มีการตอบกลับ') + '</p>';
+                    bodyHtml += '</div>';
+                } else {
+                    bodyHtml += '<div class="modal-loading">';
+                    bodyHtml += '<p>กำลังโหลด...</p>';
+                    bodyHtml += '</div>';
+                }
+            } else {
+                bodyHtml += '<div class="modal-comments-list">';
+                current.data.forEach(function(comment) {
+                    bodyHtml += buildModalCommentHtml(comment, current.postId, level);
+                });
+                bodyHtml += '</div>';
+            }
+
+            bodyHtml += '</div>';
+
+            // Build comment form (if user is logged in)
+            var formHtml = '';
+            if (currentUser) {
+                formHtml = '<div class="modal-comment-form">';
+                formHtml += '<div class="comment-form" data-post-id="' + current.postId + '">';
+                if (currentUser.avatar) {
+                    formHtml += '<img src="' + currentUser.avatar + '" alt="" class="avatar avatar-sm">';
+                } else {
+                    formHtml += '<div class="avatar avatar-sm avatar-default">' + currentUser.displayName.charAt(0) + '</div>';
+                }
+                formHtml += '<div class="comment-input-wrapper">';
+                formHtml += '<input type="text" class="comment-input" placeholder="เขียนความคิดเห็น..." onkeydown="if(event.key===\'Enter\')submitCommentInModal(this,\'' + current.postId + '\',' + (level > 0 ? '\'' + current.commentId + '\'' : 'null') + ')">';
+                formHtml += '<div class="comment-form-actions">';
+                formHtml += '<label class="comment-attach-btn" title="แนบรูป">';
+                formHtml += '<input type="file" accept="image/*" onchange="previewCommentImageModal(this, \'' + current.postId + '\')" style="display:none;">';
+                formHtml += '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+                formHtml += '</label>';
+                formHtml += '<label class="comment-anon-toggle">';
+                formHtml += '<input type="checkbox" class="comment-anon-checkbox">';
+                formHtml += '<span class="comment-anon-label">ไม่ระบุตัวตน</span>';
+                formHtml += '</label>';
+                formHtml += '</div>';
+                formHtml += '<div class="comment-image-preview" id="modal-comment-img-preview" style="display:none;">';
+                formHtml += '<img src="" alt="">';
+                formHtml += '<button type="button" class="comment-img-remove" onclick="removeCommentImageModal()">';
+                formHtml += '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
+                formHtml += '</button>';
+                formHtml += '</div>';
+                formHtml += '</div>';
+                formHtml += '</div>';
+                formHtml += '</div>';
+            }
+
+            // Combine all parts and update wrapper content
+            wrapper.innerHTML = headerHtml + filtersHtml + bodyHtml + formHtml;
+
+            // Get new natural height after content change (use scrollHeight for accuracy)
+            wrapper.style.height = 'auto';
+            var newHeight = wrapper.scrollHeight;
+
+            console.log('Modal height animation:', { oldHeight: oldHeight, newHeight: newHeight, diff: newHeight - oldHeight });
+
+            // Animate height change if there's a difference and we had a previous height
+            if (oldHeight > 0 && Math.abs(oldHeight - newHeight) > 1) {
+                console.log('Animating height from', oldHeight, 'to', newHeight);
+                // Set to old height without transition
+                wrapper.style.height = oldHeight + 'px';
+                wrapper.style.overflow = 'hidden';
+
+                // Force reflow to ensure browser registers the height change
+                void wrapper.offsetHeight;
+
+                // Use setTimeout instead of requestAnimationFrame for better reliability
+                var heightAnimTimeout = setTimeout(function() {
+                    wrapper.style.transition = 'height 0.3s ease';
+                    wrapper.style.height = newHeight + 'px';
+
+                    // Reset to auto after animation completes
+                    var heightResetTimeout = setTimeout(function() {
+                        wrapper.style.height = 'auto';
+                        wrapper.style.transition = '';
+                    }, 320);
+                    modalAnimationTimeouts.push(heightResetTimeout);
+                }, 10);
+                modalAnimationTimeouts.push(heightAnimTimeout);
+            } else {
+                // No animation needed, just ensure height is auto
+                wrapper.style.height = 'auto';
+            }
+
+            // Add slide animation (only when explicitly requested, for level changes)
+            if (shouldAnimate === true) {
+                var modalContent = document.querySelector('.comments-modal .modal-content');
+                modalContent.classList.remove('modal-content-slide'); // Remove first to restart animation
+
+                var slideAddTimeout = setTimeout(function() {
+                    modalContent.classList.add('modal-content-slide');
+                }, 10);
+                modalAnimationTimeouts.push(slideAddTimeout);
+
+                var slideRemoveTimeout = setTimeout(function() {
+                    modalContent.classList.remove('modal-content-slide');
+                }, 260);
+                modalAnimationTimeouts.push(slideRemoveTimeout);
+            }
+        }
+
+        // Build Comment HTML for Modal
+        function buildModalCommentHtml(c, postId, level) {
+            var avatarHtml = c.isAnonymous ? '<div class="avatar avatar-sm avatar-anonymous">?</div>' : (c.author && c.author.avatar ? '<img src="' + c.author.avatar + '" alt="" class="avatar avatar-sm">' : '<div class="avatar avatar-sm avatar-default">' + (c.author ? (c.author.displayName || c.author.username).charAt(0) : '?') + '</div>');
+            var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
+            var contentHtml = c.content ? '<span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' : '';
+            var imageHtml = c.image ? '<div class="comment-image"><img src="' + c.image + '" alt="" loading="lazy"></div>' : '';
+            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
+            var likes = c.likes || 0;
+            var liked = currentUser && c.likedBy && c.likedBy.some(function(id) { return id.toString() === currentUser.id; });
+
+            var deleteBtn = '';
+            var replyBtn = '';
+
+            if (currentUser) {
+                var canDelete = (c.author && c.author._id && c.author._id.toString() === currentUser.id) || currentUser.email === 'phomphat385@gmail.com';
+                deleteBtn = canDelete ? '<button class="comment-delete" onclick="deleteCommentInModal(\'' + c._id + '\',\'' + postId + '\')">ลบ</button>' : '';
+                replyBtn = '<button class="comment-reply-btn" onclick="toggleReplyFormModal(this,\'' + c._id + '\',\'' + postId + '\')">ตอบกลับ</button>';
+            }
+
+            var replyCount = c.replyCount || 0;
+            var loadRepliesBtn = replyCount > 0 ? '<button class="load-replies-btn" onclick="openRepliesModal(\'' + c._id + '\',\'' + postId + '\')">ดูการตอบกลับ (' + replyCount + ')</button>' : '';
+
+            var html = '<div class="comment" data-id="' + c._id + '">';
+            html += avatarHtml;
+            html += '<div class="comment-body">';
+            html += '<div class="comment-bubble"><span class="comment-author">' + name + '</span>' + contentHtml + '</div>';
+            html += imageHtml;
+            html += '<div class="comment-meta">';
+            html += '<button class="comment-like-btn' + (liked ? ' liked' : '') + '" onclick="likeCommentInModal(this,\'' + c._id + '\')">' + likes + ' ถูกใจ</button>';
+            html += replyBtn;
+            html += '<span class="comment-time">' + time + '</span>';
+            html += deleteBtn;
+            html += '</div>';
+            html += loadRepliesBtn;
+            html += '</div>';
+            html += '</div>';
+
+            return html;
+        }
+
+        // Filter Comments in Modal
+        function filterModalComments(sortType) {
+            var current = commentModalStack.getCurrent();
+            if (!current || current.level !== 0) return;
+
+            current.sortType = sortType;
+            renderCommentModal(false, false);
+
+            fetch('/comments/' + current.postId + '?sort=' + sortType)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    current.data = data.comments;
+                    renderCommentModal(false, false);
+                });
+        }
+
+        // Submit Comment in Modal
+        var modalCommentImage = '';
+
+        function submitCommentInModal(input, postId, parentId) {
+            var content = input.value.trim();
+            var image = modalCommentImage || '';
+            if (!content && !image) return;
+
+            var form = input.closest('.comment-form');
+            var anonCheckbox = form.querySelector('.comment-anon-checkbox');
+            var isAnonymous = anonCheckbox ? anonCheckbox.checked : false;
+
+            var body = { postId: postId, content: content, image: image, isAnonymous: isAnonymous };
+            if (parentId) body.parentId = parentId;
+
+            fetch('/comment/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    input.value = '';
+                    removeCommentImageModal();
+
+                    // Refresh current modal level
+                    var current = commentModalStack.getCurrent();
+                    if (current.level === 0) {
+                        fetch('/comments/' + current.postId + '?sort=' + current.sortType)
+                            .then(function(res) { return res.json(); })
+                            .then(function(data) {
+                                current.data = data.comments;
+                                renderCommentModal(false, false);
+                            });
+                    } else {
+                        fetch('/comment/' + current.commentId + '/replies')
+                            .then(function(res) { return res.json(); })
+                            .then(function(data) {
+                                current.data = data.replies;
+                                renderCommentModal(false, false);
+                            });
+                    }
+
+                    // Update post comment count in background
+                    var postCard = document.querySelector('.post-card[data-id="' + postId + '"]');
+                    if (postCard) {
+                        var stats = postCard.querySelectorAll('.post-stat');
+                        if (stats[1]) {
+                            var count = parseInt(stats[1].textContent) || 0;
+                            stats[1].textContent = (count + 1) + ' ความคิดเห็น';
+                        }
+                    }
+                }
+            });
+        }
+
+        function previewCommentImageModal(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    modalCommentImage = e.target.result;
+                    var preview = document.getElementById('modal-comment-img-preview');
+                    if (preview) {
+                        preview.querySelector('img').src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeCommentImageModal() {
+            modalCommentImage = '';
+            var preview = document.getElementById('modal-comment-img-preview');
+            if (preview) {
+                preview.style.display = 'none';
+                preview.querySelector('img').src = '';
+            }
+        }
+
+        // Like Comment in Modal
+        function likeCommentInModal(btn, commentId) {
+            fetch('/comment/' + commentId + '/like', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function(res) {
+                if (res.status === 401) { window.location.href = '/login'; return; }
+                return res.json();
+            })
+            .then(function(data) {
+                if (!data) return;
+                if (data.liked) btn.classList.add('liked'); else btn.classList.remove('liked');
+                btn.textContent = data.likes + ' ถูกใจ';
+            });
+        }
+
+        // Delete Comment in Modal
+        function deleteCommentInModal(commentId, postId) {
+            showConfirm('ลบความคิดเห็น', 'คุณแน่ใจหรือไม่ว่าต้องการลบความคิดเห็นนี้?', function() {
+                fetch('/comment/' + commentId + '/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        // Refresh current modal level
+                        var current = commentModalStack.getCurrent();
+                        if (current.level === 0) {
+                            fetch('/comments/' + current.postId + '?sort=' + current.sortType)
+                                .then(function(res) { return res.json(); })
+                                .then(function(data) {
+                                    current.data = data.comments;
+                                    renderCommentModal(false, false);
+                                });
+                        } else {
+                            fetch('/comment/' + current.commentId + '/replies')
+                                .then(function(res) { return res.json(); })
+                                .then(function(data) {
+                                    current.data = data.replies;
+                                    renderCommentModal(false, false);
+                                });
+                        }
+
+                        // Update post comment count
+                        var postCard = document.querySelector('.post-card[data-id="' + postId + '"]');
+                        if (postCard) {
+                            var stats = postCard.querySelectorAll('.post-stat');
+                            if (stats[1]) {
+                                var count = Math.max(0, parseInt(stats[1].textContent) - 1);
+                                stats[1].textContent = count + ' ความคิดเห็น';
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        // Toggle Reply Form in Modal - Open replies modal for direct reply
+        function toggleReplyFormModal(btn, commentId, postId) {
+            // Open replies modal to view and reply to this comment
+            openRepliesModal(commentId, postId);
+        }
+
+        // ESC key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                var modal = document.getElementById('commentsModal');
+                if (modal && modal.classList.contains('open')) {
+                    closeCommentsModal();
+                }
+                var profileModal = document.getElementById('profileModal');
+                if (profileModal && profileModal.classList.contains('open')) {
+                    closeProfileModal();
+                }
+            }
+        });
+
+        // ========== Profile Modal ==========
+
+        function openProfileModal(username) {
+            var modal = document.getElementById('profileModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            // Show loading state
+            renderProfileModal(null, true, false);
+
+            // Fetch profile data
+            fetch('/api/profile/' + username)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        renderProfileModal(data, false, false);
+                    } else {
+                        renderProfileModal(null, false, true);
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Error loading profile:', err);
+                    renderProfileModal(null, false, true);
+                });
+        }
+
+        function closeProfileModal() {
+            var modal = document.getElementById('profileModal');
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function renderProfileModal(data, isLoading, hasError) {
+            var content = document.getElementById('profileModalContent');
+            var html = '';
+
+            // Header
+            html += '<div class="modal-header">';
+            html += '<h2>โปรไฟล์</h2>';
+            html += '<button class="modal-close" onclick="closeProfileModal()">';
+            html += '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
+            html += '</button>';
+            html += '</div>';
+
+            // Body
+            html += '<div class="modal-body" style="padding: 0;">';
+
+            if (hasError) {
+                html += '<div class="modal-empty" style="padding: 40px 20px;">';
+                html += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+                html += '<p>ไม่พบผู้ใช้</p>';
+                html += '</div>';
+            } else if (isLoading) {
+                html += '<div class="modal-loading" style="padding: 40px 20px;">';
+                html += '<p>กำลังโหลด...</p>';
+                html += '</div>';
+            } else if (data && data.user) {
+                var user = data.user;
+                var posts = data.posts || [];
+
+                // Profile Header
+                html += '<div class="card profile-card" style="margin: 0; border-radius: 0; border: none; border-bottom: 1px solid #e4e6eb;">';
+                html += '<div class="profile-header">';
+                html += '<div class="profile-avatar-wrapper">';
+                if (user.avatar) {
+                    html += '<img src="' + user.avatar + '" alt="" class="avatar avatar-xl">';
+                } else {
+                    html += '<div class="avatar avatar-xl avatar-default">' + (user.displayName || user.username).charAt(0) + '</div>';
+                }
+                html += '</div>';
+                html += '<div class="profile-info">';
+                html += '<h1 class="profile-name">' + (user.displayName || user.username) + '</h1>';
+                html += '<p class="profile-username">@' + user.username + '</p>';
+                if (user.bio) {
+                    html += '<p class="profile-bio">' + user.bio + '</p>';
+                }
+                var joinDate = new Date(user.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+                html += '<p class="profile-joined">สมาชิกตั้งแต่ ' + joinDate + '</p>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+
+                // Posts Section
+                html += '<div style="padding: 16px 20px; max-height: 50vh; overflow-y: auto;">';
+                html += '<h2 class="section-label" style="margin-bottom: 12px;">โพสต์</h2>';
+
+                if (posts.length > 0) {
+                    posts.forEach(function(post) {
+                        html += '<div class="card post-card" data-id="' + post._id + '" style="margin-bottom: 12px;">';
+
+                        // Post header
+                        html += '<div class="post-header">';
+                        html += '<div class="post-author">';
+                        if (post.isAnonymous) {
+                            html += '<div class="avatar avatar-md avatar-anonymous">?</div>';
+                        } else if (post.author && post.author.avatar) {
+                            html += '<img src="' + post.author.avatar + '" alt="" class="avatar avatar-md">';
+                        } else {
+                            html += '<div class="avatar avatar-md avatar-default">' + (post.author ? (post.author.displayName || post.author.username).charAt(0) : '?') + '</div>';
+                        }
+                        html += '<div class="post-author-info">';
+                        html += '<span class="post-author-name">' + (post.isAnonymous ? 'ไม่ระบุตัวตน' : (post.author ? (post.author.displayName || post.author.username) : 'ผู้ใช้ที่ถูกลบ')) + '</span>';
+                        var postTime = new Date(post.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        html += '<span class="post-time">' + postTime + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        // Post content
+                        if (post.content) {
+                            html += '<div class="post-content">' + post.content + '</div>';
+                        }
+
+                        // Post image
+                        if (post.image) {
+                            html += '<div class="post-image"><img src="' + post.image + '" alt="" loading="lazy"></div>';
+                        }
+
+                        // Post stats
+                        html += '<div class="post-stats">';
+                        html += '<span class="post-stat">' + (post.likes || 0) + ' ถูกใจ</span>';
+                        html += '<span class="post-stat">' + (post.commentCount || 0) + ' ความคิดเห็น</span>';
+                        html += '</div>';
+
+                        html += '</div>';
+                    });
+                } else {
+                    html += '<div class="card empty-feed">';
+                    html += '<p>ยังไม่มีโพสต์</p>';
+                    html += '</div>';
+                }
+
+                html += '</div>';
+            }
+
+            html += '</div>';
+
+            content.innerHTML = html;
         }
     </script>
 

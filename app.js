@@ -5,10 +5,9 @@ const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./src/config/db');
-const Visit = require('./src/models/Visit');
 const indexRoutes = require('./src/routes/index');
 const authRoutes = require('./src/routes/auth');
-const manageRoutes = require('./src/routes/manage');
+
 const commentRoutes = require('./src/routes/comment');
 const profileRoutes = require('./src/routes/profile');
 
@@ -40,21 +39,11 @@ app.use(session({
     }
 }));
 
-// Track homepage visits only
-app.use(async (req, res, next) => {
-    if (req.method === 'GET' && req.path === '/') {
-        const today = new Date().toISOString().slice(0, 10);
-        Visit.findOneAndUpdate({ date: today }, { $inc: { count: 1 } }, { upsert: true }).catch(() => {});
-    }
-    next();
-});
-
 // Routes
-app.use('/', indexRoutes);
-app.use('/', authRoutes);
-app.use('/', manageRoutes);
-app.use('/', commentRoutes);
 app.use('/', profileRoutes);
+app.use('/', commentRoutes);
+app.use('/', authRoutes);
+app.use('/', indexRoutes);
 
 // Start server
 app.listen(PORT, () => {

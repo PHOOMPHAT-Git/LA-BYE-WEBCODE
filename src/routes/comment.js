@@ -3,23 +3,34 @@ const Comment = require('../models/Comment');
 const Post = require('../models/Post');
 const router = express.Router();
 
-// Add comment
+// Add comment (or reply)
 router.post('/comment/create', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
 
-    const { postId, content, isAnonymous } = req.body;
-    if (!content || !postId) return res.status(400).json({ error: 'กรุณาเขียนความคิดเห็น' });
+    const { postId, parentId, content, image, isAnonymous } = req.body;
+    if (!content && !image) return res.status(400).json({ error: 'กรุณาเขียนความคิดเห็นหรือแนบรูป' });
+    if (!postId) return res.status(400).json({ error: 'ไม่พบโพสต์' });
 
     const post = await Post.findById(postId);
     if (!post) return res.status(404).json({ error: 'ไม่พบโพสต์' });
 
-    const comment = await Comment.create({
+    const commentData = {
         post: postId,
         author: req.session.user.id,
-        content,
+        content: content || '',
+        image: image || '',
         isAnonymous: isAnonymous === true || isAnonymous === 'true'
-    });
+    };
 
+    if (parentId) {
+        const parentComment = await Comment.findById(parentId);
+        if (!parentComment) return res.status(404).json({ error: 'ไม่พบความคิดเห็นที่จะตอบกลับ' });
+        commentData.parent = parentId;
+        parentComment.replyCount = (parentComment.replyCount || 0) + 1;
+        await parentComment.save();
+    }
+
+    const comment = await Comment.create(commentData);
     const populated = await comment.populate('author', 'username displayName avatar');
 
     res.json({
@@ -27,14 +38,41 @@ router.post('/comment/create', async (req, res) => {
         comment: {
             _id: populated._id,
             content: populated.content,
+            image: populated.image,
             isAnonymous: populated.isAnonymous,
             author: populated.author,
+            parent: populated.parent,
+            likes: 0,
+            likedBy: [],
+            replyCount: 0,
             created_at: populated.created_at
         }
     });
 });
 
-// Delete comment
+// Like/unlike comment
+router.post('/comment/:id/like', async (req, res) => {
+    if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
+
+    const userId = req.session.user.id;
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ error: 'ไม่พบความคิดเห็น' });
+
+    const alreadyLiked = comment.likedBy.some(id => id.toString() === userId);
+
+    if (alreadyLiked) {
+        comment.likedBy.pull(userId);
+        comment.likes = Math.max(0, comment.likes - 1);
+    } else {
+        comment.likedBy.push(userId);
+        comment.likes = comment.likes + 1;
+    }
+
+    await comment.save();
+    res.json({ likes: comment.likes, liked: !alreadyLiked });
+});
+
+// Delete comment (and its replies)
 router.post('/comment/:id/delete', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
 
@@ -46,17 +84,46 @@ router.post('/comment/:id/delete', async (req, res) => {
         return res.status(403).json({ error: 'ไม่มีสิทธิ์ลบความคิดเห็นนี้' });
     }
 
+    // Decrease parent's replyCount
+    if (comment.parent) {
+        await Comment.findByIdAndUpdate(comment.parent, { $inc: { replyCount: -1 } });
+    }
+
+    // Delete all nested replies recursively
+    async function deleteReplies(parentId) {
+        const replies = await Comment.find({ parent: parentId });
+        for (const reply of replies) {
+            await deleteReplies(reply._id);
+            await Comment.findByIdAndDelete(reply._id);
+        }
+    }
+    await deleteReplies(req.params.id);
     await Comment.findByIdAndDelete(req.params.id);
     res.json({ success: true });
 });
 
-// Get all comments for a post
+// Get all top-level comments for a post
 router.get('/comments/:postId', async (req, res) => {
-    const comments = await Comment.find({ post: req.params.postId })
+    const sortType = req.query.sort || 'oldest';
+    let sortOption;
+    if (sortType === 'newest') sortOption = { created_at: -1 };
+    else if (sortType === 'popular') sortOption = { likes: -1, created_at: -1 };
+    else sortOption = { created_at: 1 };
+
+    const comments = await Comment.find({ post: req.params.postId, parent: null })
+        .populate('author', 'username displayName avatar')
+        .sort(sortOption);
+
+    res.json({ comments });
+});
+
+// Get replies for a comment
+router.get('/comment/:id/replies', async (req, res) => {
+    const replies = await Comment.find({ parent: req.params.id })
         .populate('author', 'username displayName avatar')
         .sort({ created_at: 1 });
 
-    res.json({ comments });
+    res.json({ replies });
 });
 
 module.exports = router;

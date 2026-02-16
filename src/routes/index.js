@@ -12,9 +12,9 @@ router.get('/', async (req, res) => {
 
     // Get comment counts and recent comments for each post
     const postsWithComments = await Promise.all(posts.map(async (post) => {
-        const comments = await Comment.find({ post: post._id })
+        const comments = await Comment.find({ post: post._id, parent: null })
             .populate('author', 'username displayName avatar')
-            .sort({ created_at: -1 })
+            .sort({ created_at: 1 })
             .limit(3);
         const commentCount = await Comment.countDocuments({ post: post._id });
         return { ...post.toObject(), comments, commentCount };
@@ -54,6 +54,24 @@ router.post('/post/:id/delete', async (req, res) => {
 
     await Comment.deleteMany({ post: post._id });
     await Post.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+});
+
+// Edit post
+router.post('/post/:id/edit', async (req, res) => {
+    if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
+
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ error: 'ไม่พบโพสต์' });
+
+    const isAdmin = req.session.user.email === 'phomphat385@gmail.com';
+    if (post.author.toString() !== req.session.user.id && !isAdmin) {
+        return res.status(403).json({ error: 'ไม่มีสิทธิ์แก้ไขโพสต์นี้' });
+    }
+
+    post.content = req.body.content || '';
+    post.updated_at = Date.now();
+    await post.save();
     res.json({ success: true });
 });
 

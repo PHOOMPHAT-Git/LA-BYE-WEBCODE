@@ -53,7 +53,13 @@ router.post('/register', async (req, res) => {
             avatar: user.avatar
         };
 
-        res.redirect('/');
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.render('register', { error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' });
+            }
+            res.redirect('/');
+        });
     } catch (err) {
         console.error('Register error:', err);
         res.render('register', { error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' });
@@ -95,7 +101,13 @@ router.post('/login', async (req, res) => {
             avatar: user.avatar
         };
 
-        res.redirect('/');
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.render('login', { error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' });
+            }
+            res.redirect('/');
+        });
     } catch (err) {
         console.error('Login error:', err);
         res.render('login', { error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' });
