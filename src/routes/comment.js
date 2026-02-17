@@ -7,6 +7,13 @@ const router = express.Router();
 router.post('/comment/create', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
 
+    // Rate limit: 3 seconds between comments
+    const now = Date.now();
+    if (req.session._lastCommentAt && now - req.session._lastCommentAt < 3000) {
+        return res.status(429).json({ error: 'กรุณารอสักครู่ก่อนแสดงความคิดเห็นอีกครั้ง' });
+    }
+    req.session._lastCommentAt = now;
+
     const { postId, parentId, content, image, isAnonymous } = req.body;
     if (!content && !image) return res.status(400).json({ error: 'กรุณาเขียนความคิดเห็นหรือแนบรูป' });
     if (!postId) return res.status(400).json({ error: 'ไม่พบโพสต์' });
@@ -112,7 +119,8 @@ router.get('/comments/:postId', async (req, res) => {
 
     const comments = await Comment.find({ post: req.params.postId, parent: null })
         .populate('author', 'username displayName avatar')
-        .sort(sortOption);
+        .sort(sortOption)
+        .lean();
 
     res.json({ comments });
 });
@@ -121,7 +129,8 @@ router.get('/comments/:postId', async (req, res) => {
 router.get('/comment/:id/replies', async (req, res) => {
     const replies = await Comment.find({ parent: req.params.id })
         .populate('author', 'username displayName avatar')
-        .sort({ created_at: 1 });
+        .sort({ created_at: 1 })
+        .lean();
 
     res.json({ replies });
 });

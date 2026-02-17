@@ -4,28 +4,109 @@ const Comment = require('../models/Comment');
 const User = require('../models/User');
 const router = express.Router();
 
+const POSTS_PER_PAGE = 10;
+
 // Feed page
 router.get('/', async (req, res) => {
     const posts = await Post.find()
         .populate('author', 'username displayName avatar')
-        .sort({ created_at: -1 });
+        .sort({ created_at: -1 })
+        .limit(POSTS_PER_PAGE)
+        .lean();
 
-    // Get comment counts and recent comments for each post
-    const postsWithComments = await Promise.all(posts.map(async (post) => {
-        const comments = await Comment.find({ post: post._id, parent: null })
-            .populate('author', 'username displayName avatar')
-            .sort({ created_at: 1 })
-            .limit(3);
-        const commentCount = await Comment.countDocuments({ post: post._id });
-        return { ...post.toObject(), comments, commentCount };
+    const postIds = posts.map(p => p._id);
+
+    // Batch: get all top-level comments for these posts (limit 3 per post)
+    const allComments = await Comment.find({ post: { $in: postIds }, parent: null })
+        .populate('author', 'username displayName avatar')
+        .sort({ created_at: 1 })
+        .lean();
+
+    // Batch: get comment counts
+    const commentCounts = await Comment.aggregate([
+        { $match: { post: { $in: postIds } } },
+        { $group: { _id: '$post', count: { $sum: 1 } } }
+    ]);
+    const countMap = {};
+    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
+
+    // Map comments to posts (limit 3 per post)
+    const commentMap = {};
+    allComments.forEach(c => {
+        const pid = c.post.toString();
+        if (!commentMap[pid]) commentMap[pid] = [];
+        if (commentMap[pid].length < 3) commentMap[pid].push(c);
+    });
+
+    const postsWithComments = posts.map(post => ({
+        ...post,
+        comments: commentMap[post._id.toString()] || [],
+        commentCount: countMap[post._id.toString()] || 0
     }));
 
-    res.render('index', { user: req.session.user, posts: postsWithComments });
+    const hasMore = posts.length === POSTS_PER_PAGE;
+
+    // API request for load more
+    if (req.query.page) {
+        return res.json({ posts: postsWithComments, hasMore });
+    }
+
+    res.render('index', { user: req.session.user, posts: postsWithComments, hasMore });
+});
+
+// API: Load more posts
+router.get('/api/posts', async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * POSTS_PER_PAGE;
+
+    const posts = await Post.find()
+        .populate('author', 'username displayName avatar')
+        .sort({ created_at: -1 })
+        .skip(skip)
+        .limit(POSTS_PER_PAGE)
+        .lean();
+
+    const postIds = posts.map(p => p._id);
+
+    const allComments = await Comment.find({ post: { $in: postIds }, parent: null })
+        .populate('author', 'username displayName avatar')
+        .sort({ created_at: 1 })
+        .lean();
+
+    const commentCounts = await Comment.aggregate([
+        { $match: { post: { $in: postIds } } },
+        { $group: { _id: '$post', count: { $sum: 1 } } }
+    ]);
+    const countMap = {};
+    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
+
+    const commentMap = {};
+    allComments.forEach(c => {
+        const pid = c.post.toString();
+        if (!commentMap[pid]) commentMap[pid] = [];
+        if (commentMap[pid].length < 3) commentMap[pid].push(c);
+    });
+
+    const postsWithComments = posts.map(post => ({
+        ...post,
+        comments: commentMap[post._id.toString()] || [],
+        commentCount: countMap[post._id.toString()] || 0
+    }));
+
+    const hasMore = posts.length === POSTS_PER_PAGE;
+    res.json({ posts: postsWithComments, hasMore });
 });
 
 // Create post
 router.post('/post/create', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
+
+    // Rate limit: 3 seconds between posts
+    const now = Date.now();
+    if (req.session._lastPostAt && now - req.session._lastPostAt < 3000) {
+        return res.status(429).json({ error: 'กรุณารอสักครู่ก่อนโพสต์อีกครั้ง' });
+    }
+    req.session._lastPostAt = now;
 
     const { content, image, isAnonymous } = req.body;
     if (!content && !image) return res.status(400).json({ error: 'กรุณาเขียนข้อความหรือแนบรูป' });

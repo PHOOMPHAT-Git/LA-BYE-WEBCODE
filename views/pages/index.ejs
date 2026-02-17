@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Labye // ลาบาย</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/components/scrollbar.css">
@@ -237,6 +237,12 @@
                     <p>ยังไม่มีโพสต์ เริ่มระบายเป็นคนแรกเลย!</p>
                 </div>
             <% } %>
+
+            <% if (typeof hasMore !== 'undefined' && hasMore) { %>
+            <div id="loadMoreContainer" style="text-align: center; padding: 16px 0;">
+                <button class="btn btn-outline" id="loadMoreBtn" onclick="loadMorePosts()">โหลดเพิ่มเติม</button>
+            </div>
+            <% } %>
         </div>
     </main>
 
@@ -434,7 +440,162 @@
             btn.disabled = !content && !imageBase64;
         }
 
+        // Load more posts pagination
+        var currentPage = 1;
+        var isLoadingMore = false;
+
+        function loadMorePosts() {
+            if (isLoadingMore) return;
+            isLoadingMore = true;
+            var btn = document.getElementById('loadMoreBtn');
+            btn.textContent = 'กำลังโหลด...';
+            btn.disabled = true;
+            currentPage++;
+
+            fetch('/api/posts?page=' + currentPage)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    isLoadingMore = false;
+                    var container = document.querySelector('.feed-container');
+                    var loadMoreDiv = document.getElementById('loadMoreContainer');
+
+                    data.posts.forEach(function(post) {
+                        var postHtml = buildPostHtml(post);
+                        loadMoreDiv.insertAdjacentHTML('beforebegin', postHtml);
+                    });
+
+                    if (!data.hasMore) {
+                        loadMoreDiv.remove();
+                    } else {
+                        btn.textContent = 'โหลดเพิ่มเติม';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(function() {
+                    isLoadingMore = false;
+                    btn.textContent = 'โหลดเพิ่มเติม';
+                    btn.disabled = false;
+                });
+        }
+
+        function buildPostHtml(post) {
+            var isOwner = currentUser && (
+                (post.author && post.author._id && post.author._id.toString() === currentUser.id) ||
+                currentUser.email === 'phomphat385@gmail.com'
+            );
+            var liked = currentUser && post.likedBy && post.likedBy.some(function(id) { return id.toString() === currentUser.id; });
+
+            var html = '<div class="card post-card" data-id="' + post._id + '">';
+            html += '<div class="post-header">';
+
+            // Author clickable wrapper
+            if (!post.isAnonymous && post.author && post.author.username) {
+                html += '<div class="post-author post-author-clickable" onclick="openProfileModal(\'' + post.author.username + '\')">';
+            } else {
+                html += '<div class="post-author">';
+            }
+
+            // Avatar
+            if (post.isAnonymous) {
+                html += '<div class="avatar avatar-md avatar-anonymous">?</div>';
+            } else if (post.author && post.author.avatar) {
+                html += '<img src="' + post.author.avatar + '" alt="" class="avatar avatar-md">';
+            } else {
+                html += '<div class="avatar avatar-md avatar-default">' + (post.author ? (post.author.displayName || post.author.username).charAt(0) : '?') + '</div>';
+            }
+
+            // Author info
+            html += '<div class="post-author-info">';
+            html += '<span class="post-author-name">';
+            html += post.isAnonymous ? 'ไม่ระบุตัวตน' : (post.author ? (post.author.displayName || post.author.username) : 'ผู้ใช้ที่ถูกลบ');
+            html += '</span>';
+            var time = new Date(post.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            html += '<span class="post-time">' + time + '</span>';
+            html += '</div></div>';
+
+            // Post menu (for owner/admin)
+            if (isOwner) {
+                html += '<div class="post-menu">';
+                html += '<button class="post-menu-btn" onclick="togglePostMenu(this)">';
+                html += '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
+                html += '</button>';
+                html += '<div class="post-menu-dropdown">';
+                html += '<button onclick="openEditPost(\'' + post._id + '\', this)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> แก้ไขโพสต์</button>';
+                html += '<button class="danger" onclick="deletePost(\'' + post._id + '\')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> ลบโพสต์</button>';
+                html += '</div></div>';
+            }
+            html += '</div>';
+
+            // Content
+            if (post.content) {
+                html += '<div class="post-content">' + post.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+            }
+
+            // Image
+            if (post.image) {
+                html += '<div class="post-image"><img src="' + post.image + '" alt="" loading="lazy"></div>';
+            }
+
+            // Stats
+            html += '<div class="post-stats">';
+            html += '<span class="post-stat">' + (post.likes || 0) + ' ถูกใจ</span>';
+            html += '<span class="post-stat">' + (post.commentCount || 0) + ' ความคิดเห็น</span>';
+            html += '</div>';
+
+            // Actions
+            html += '<div class="post-actions">';
+            html += '<button class="post-action-btn' + (liked ? ' liked' : '') + '" onclick="toggleLike(this, \'' + post._id + '\')">';
+            html += '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+            html += ' ถูกใจ</button>';
+            html += '<button class="post-action-btn" onclick="toggleComments(\'' + post._id + '\')">';
+            html += '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+            html += ' ความคิดเห็น</button>';
+            html += '</div>';
+
+            // Comments section (inline, collapsed)
+            html += '<div class="comments-section" id="comments-' + post._id + '">';
+            html += '<div class="comment-filters" data-post-id="' + post._id + '">';
+            html += '<button class="comment-filter-btn active" onclick="filterComments(this, \'' + post._id + '\', \'oldest\')">เก่าสุด</button>';
+            html += '<button class="comment-filter-btn" onclick="filterComments(this, \'' + post._id + '\', \'newest\')">ใหม่สุด</button>';
+            html += '<button class="comment-filter-btn" onclick="filterComments(this, \'' + post._id + '\', \'popular\')">นิยม</button>';
+            html += '</div>';
+            html += '<div class="comments-list" id="comments-list-' + post._id + '"></div>';
+
+            // Comment form
+            if (currentUser) {
+                html += '<div class="comment-form" data-post-id="' + post._id + '">';
+                if (currentUser.avatar) {
+                    html += '<img src="' + currentUser.avatar + '" alt="" class="avatar avatar-sm">';
+                } else {
+                    html += '<div class="avatar avatar-sm avatar-default">' + currentUser.displayName.charAt(0) + '</div>';
+                }
+                html += '<div class="comment-input-wrapper">';
+                html += '<input type="text" class="comment-input" placeholder="เขียนความคิดเห็น..." onkeydown="if(event.key===\'Enter\')submitComment(this,\'' + post._id + '\')">';
+                html += '<div class="comment-form-actions">';
+                html += '<label class="comment-attach-btn" title="แนบรูป">';
+                html += '<input type="file" accept="image/*" onchange="previewCommentImage(this, \'' + post._id + '\')" style="display:none;">';
+                html += '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+                html += '</label>';
+                html += '<label class="comment-anon-toggle">';
+                html += '<input type="checkbox" class="comment-anon-checkbox">';
+                html += '<span class="comment-anon-label">ไม่ระบุตัวตน</span>';
+                html += '</label>';
+                html += '</div>';
+                html += '<div class="comment-image-preview" id="comment-img-preview-' + post._id + '" style="display:none;">';
+                html += '<img src="" alt="">';
+                html += '<button type="button" class="comment-img-remove" onclick="removeCommentImage(\'' + post._id + '\')">';
+                html += '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
+                html += '</button></div></div></div>';
+            }
+
+            html += '</div></div>';
+            return html;
+        }
+
         var imageBase64 = '';
+        var isSubmittingPost = false;
+        var isSubmittingComment = false;
+        var isSavingEdit = false;
 
         function previewImage(input) {
             if (input.files && input.files[0]) {
@@ -457,9 +618,14 @@
         }
 
         function submitPost() {
+            if (isSubmittingPost) return;
             var content = document.getElementById('postContent').value.trim();
             var isAnonymous = document.getElementById('postAnonymous').checked;
             if (!content && !imageBase64) return;
+
+            isSubmittingPost = true;
+            var btn = document.getElementById('submitPostBtn');
+            btn.disabled = true;
 
             fetch('/post/create', {
                 method: 'POST',
@@ -469,7 +635,9 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) window.location.reload();
-            });
+                else { isSubmittingPost = false; btn.disabled = false; }
+            })
+            .catch(function() { isSubmittingPost = false; btn.disabled = false; });
         }
 
         // Edit post
@@ -493,8 +661,11 @@
         }
 
         function saveEditPost() {
+            if (isSavingEdit) return;
             var content = document.getElementById('editPostContent').value.trim();
             if (!editingPostId) return;
+
+            isSavingEdit = true;
 
             fetch('/post/' + editingPostId + '/edit', {
                 method: 'POST',
@@ -503,13 +674,15 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSavingEdit = false;
                 if (data.success) {
                     var card = document.querySelector('.post-card[data-id="' + editingPostId + '"]');
                     var contentEl = card.querySelector('.post-content');
                     if (contentEl) contentEl.textContent = content;
                     closeEditPost();
                 }
-            });
+            })
+            .catch(function() { isSavingEdit = false; });
         }
 
         // Like post
@@ -560,12 +733,16 @@
         }
 
         function submitComment(input, postId, parentId) {
+            if (isSubmittingComment) return;
             var content = input.value.trim();
             var image = commentImages[postId] || '';
             if (!content && !image) return;
             var form = input.closest('.comment-form');
             var anonCheckbox = form.querySelector('.comment-anon-checkbox');
             var isAnonymous = anonCheckbox ? anonCheckbox.checked : false;
+
+            isSubmittingComment = true;
+            input.disabled = true;
 
             var body = { postId: postId, content: content, image: image, isAnonymous: isAnonymous };
             if (parentId) body.parentId = parentId;
@@ -577,6 +754,8 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSubmittingComment = false;
+                input.disabled = false;
                 if (data.success) {
                     var c = data.comment;
                     if (parentId) {
@@ -594,7 +773,8 @@
                     var stats = card.querySelectorAll('.post-stat');
                     if (stats[1]) { stats[1].textContent = (parseInt(stats[1].textContent) + 1) + ' ความคิดเห็น'; }
                 }
-            });
+            })
+            .catch(function() { isSubmittingComment = false; input.disabled = false; });
         }
 
         function likeComment(btn, commentId) {
@@ -1092,9 +1272,13 @@
         var modalCommentImage = '';
 
         function submitCommentInModal(input, postId, parentId) {
+            if (isSubmittingComment) return;
             var content = input.value.trim();
             var image = modalCommentImage || '';
             if (!content && !image) return;
+
+            isSubmittingComment = true;
+            input.disabled = true;
 
             var form = input.closest('.comment-form');
             var anonCheckbox = form.querySelector('.comment-anon-checkbox');
@@ -1110,6 +1294,8 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSubmittingComment = false;
+                input.disabled = false;
                 if (data.success) {
                     input.value = '';
                     removeCommentImageModal();
@@ -1142,7 +1328,8 @@
                         }
                     }
                 }
-            });
+            })
+            .catch(function() { isSubmittingComment = false; input.disabled = false; });
         }
 
         function previewCommentImageModal(input) {

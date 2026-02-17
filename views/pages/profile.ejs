@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Labye // ลาบาย</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/components/scrollbar.css">
@@ -377,6 +377,9 @@
 
         var avatarBase64 = '';
         var shouldRemoveAvatar = false;
+        var isSubmittingComment = false;
+        var isSavingEdit = false;
+        var isSavingSettings = false;
 
         function previewAvatar(input) {
             if (input.files && input.files[0]) {
@@ -421,6 +424,7 @@
         }
 
         function saveSettings() {
+            if (isSavingSettings) return;
             var displayName = document.getElementById('settingsDisplayName').value.trim();
             var bio = document.getElementById('settingsBio').value.trim();
 
@@ -431,6 +435,8 @@
                 body.avatar = avatarBase64;
             }
 
+            isSavingSettings = true;
+
             fetch('/profile/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -439,7 +445,9 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) window.location.reload();
-            });
+                else { isSavingSettings = false; }
+            })
+            .catch(function() { isSavingSettings = false; });
         }
 
         function confirmDeleteProfile() {
@@ -483,8 +491,11 @@
         }
 
         function saveEditPost() {
+            if (isSavingEdit) return;
             var content = document.getElementById('editPostContent').value.trim();
             if (!editingPostId) return;
+
+            isSavingEdit = true;
 
             fetch('/post/' + editingPostId + '/edit', {
                 method: 'POST',
@@ -493,13 +504,15 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSavingEdit = false;
                 if (data.success) {
                     var card = document.querySelector('.post-card[data-id="' + editingPostId + '"]');
                     var contentEl = card.querySelector('.post-content');
                     if (contentEl) contentEl.textContent = content;
                     closeEditPost();
                 }
-            });
+            })
+            .catch(function() { isSavingEdit = false; });
         }
 
         // Like post
@@ -548,12 +561,16 @@
         }
 
         function submitComment(input, postId, parentId) {
+            if (isSubmittingComment) return;
             var content = input.value.trim();
             var image = commentImages[postId] || '';
             if (!content && !image) return;
             var form = input.closest('.comment-form');
             var anonCheckbox = form.querySelector('.comment-anon-checkbox');
             var isAnonymous = anonCheckbox ? anonCheckbox.checked : false;
+
+            isSubmittingComment = true;
+            input.disabled = true;
 
             var body = { postId: postId, content: content, image: image, isAnonymous: isAnonymous };
             if (parentId) body.parentId = parentId;
@@ -565,12 +582,13 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSubmittingComment = false;
+                input.disabled = false;
                 if (data.success) {
                     var c = data.comment;
                     if (parentId) {
                         var repliesContainer = document.getElementById('replies-' + parentId);
                         repliesContainer.insertAdjacentHTML('beforeend', buildCommentHtml(c, postId, true, true));
-                        // Remove reply form
                         var replyForm = form.closest('.reply-form-wrapper');
                         if (replyForm) replyForm.remove();
                     } else {
@@ -583,7 +601,8 @@
                     var stats = card.querySelectorAll('.post-stat');
                     if (stats[1]) { stats[1].textContent = (parseInt(stats[1].textContent) + 1) + ' ความคิดเห็น'; }
                 }
-            });
+            })
+            .catch(function() { isSubmittingComment = false; input.disabled = false; });
         }
 
         function likeComment(btn, commentId) {
@@ -1070,9 +1089,13 @@
         var modalCommentImage = '';
 
         function submitCommentInModal(input, postId, parentId) {
+            if (isSubmittingComment) return;
             var content = input.value.trim();
             var image = modalCommentImage || '';
             if (!content && !image) return;
+
+            isSubmittingComment = true;
+            input.disabled = true;
 
             var form = input.closest('.comment-form');
             var anonCheckbox = form.querySelector('.comment-anon-checkbox');
@@ -1088,6 +1111,8 @@
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
+                isSubmittingComment = false;
+                input.disabled = false;
                 if (data.success) {
                     input.value = '';
                     removeCommentImageModal();
@@ -1120,7 +1145,8 @@
                         }
                     }
                 }
-            });
+            })
+            .catch(function() { isSubmittingComment = false; input.disabled = false; });
         }
 
         function previewCommentImageModal(input) {
