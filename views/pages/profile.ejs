@@ -64,7 +64,7 @@
                         <% if (profileUser.bio) { %>
                             <p class="profile-bio"><%= profileUser.bio %></p>
                         <% } %>
-                        <p class="profile-joined">สมาชิกตั้งแต่ <%= new Date(profileUser.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+                        <p class="profile-joined">สมาชิกตั้งแต่ <%= new Date(profileUser.created_at).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'long', year: 'numeric' }) %></p>
                     </div>
                 </div>
                 <div class="profile-actions">
@@ -88,7 +88,7 @@
                             <% } %>
                             <div class="post-author-info">
                                 <span class="post-author-name"><%= post.isAnonymous ? 'ไม่ระบุตัวตน' : (post.author ? (post.author.displayName || post.author.username) : 'ผู้ใช้ที่ถูกลบ') %></span>
-                                <span class="post-time"><%= new Date(post.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
+                                <span class="post-time"><%= new Date(post.created_at).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
                             </div>
                         </div>
                         <div class="post-menu">
@@ -160,7 +160,7 @@
                                         <div class="comment-meta">
                                             <button class="comment-like-btn<%= comment.likedBy && comment.likedBy.some(function(id) { return id.toString() === user.id.toString(); }) ? ' liked' : '' %>" onclick="likeComment(this, '<%= comment._id %>')"><%= comment.likes || 0 %> ถูกใจ</button>
                                             <button class="comment-reply-btn" onclick="toggleReplyForm(this, '<%= comment._id %>', '<%= post._id %>')">ตอบกลับ</button>
-                                            <span class="comment-time"><%= new Date(comment.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
+                                            <span class="comment-time"><%= new Date(comment.created_at).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
                                             <% if (comment.author && comment.author._id && comment.author._id.toString() === user.id.toString() || user.email === 'phomphat385@gmail.com') { %>
                                                 <button class="comment-delete" onclick="deleteComment('<%= comment._id %>', '<%= post._id %>')">ลบ</button>
                                             <% } %>
@@ -620,7 +620,7 @@
             var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
             var contentHtml = c.content ? '<span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' : '';
             var imageHtml = c.image ? '<div class="comment-image"><img src="' + c.image + '" alt="" loading="lazy"></div>' : '';
-            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
+            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
             var likes = c.likes || 0;
             var liked = c.liked || false;
             var deleteBtn = canDelete ? '<button class="comment-delete" onclick="deleteComment(\'' + c._id + '\',\'' + postId + '\')">ลบ</button>' : '';
@@ -1035,7 +1035,7 @@
             var name = c.isAnonymous ? 'ไม่ระบุตัวตน' : (c.author ? (c.author.displayName || c.author.username) : 'ผู้ใช้ที่ถูกลบ');
             var contentHtml = c.content ? '<span class="comment-text">' + c.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' : '';
             var imageHtml = c.image ? '<div class="comment-image"><img src="' + c.image + '" alt="" loading="lazy"></div>' : '';
-            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
+            var time = c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'เมื่อสักครู่';
             var likes = c.likes || 0;
             var liked = currentUser && c.likedBy && c.likedBy.some(function(id) { return id.toString() === currentUser.id; });
 
