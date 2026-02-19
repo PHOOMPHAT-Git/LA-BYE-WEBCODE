@@ -12,6 +12,13 @@ router.get('/register', (req, res) => {
 
 // Register handler
 router.post('/register', async (req, res) => {
+    // Rate limit: 5 seconds between attempts
+    const now = Date.now();
+    if (req.session._lastRegisterAt && now - req.session._lastRegisterAt < 5000) {
+        return res.render('register', { error: 'กรุณารอสักครู่ก่อนลองอีกครั้ง' });
+    }
+    req.session._lastRegisterAt = now;
+
     const { username, email, password, confirmPassword } = req.body;
 
     if (!username || !email || !password || !confirmPassword) {
@@ -74,6 +81,13 @@ router.get('/login', (req, res) => {
 
 // Login handler
 router.post('/login', async (req, res) => {
+    // Rate limit: 3 seconds between attempts
+    const now = Date.now();
+    if (req.session._lastLoginAt && now - req.session._lastLoginAt < 3000) {
+        return res.render('login', { error: 'กรุณารอสักครู่ก่อนลองอีกครั้ง' });
+    }
+    req.session._lastLoginAt = now;
+
     const { email, password } = req.body;
 
     if (!email || !password) {

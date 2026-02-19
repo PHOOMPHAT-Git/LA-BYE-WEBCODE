@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         document.body.classList.add('loaded');
     }, 10);
+
+    var form = document.querySelector('.auth-form');
+    form.addEventListener('submit', function() {
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'กำลังเข้าสู่ระบบ...';
+    });
 });
 </script>
 
