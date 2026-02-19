@@ -1082,12 +1082,14 @@
             if (!current || current.level !== 0) return;
 
             current.sortType = sortType;
+            current.loading = true;
             renderCommentModal(false, false);
 
             fetch('/comments/' + current.postId + '?sort=' + sortType)
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
                     current.data = data.comments;
+                    current.loading = false;
                     renderCommentModal(false, false);
                 });
         }
