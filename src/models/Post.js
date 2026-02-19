@@ -12,4 +12,7 @@ const PostSchema = new mongoose.Schema({
     updated_at: { type: Date, default: Date.now }
 });
 
+PostSchema.index({ created_at: -1 });
+PostSchema.index({ author: 1, created_at: -1 });
+
 module.exports = mongoose.models.Post || mongoose.model('Post', PostSchema, 'posts');

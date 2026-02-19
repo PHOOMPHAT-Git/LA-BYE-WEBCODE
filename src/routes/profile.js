@@ -4,25 +4,52 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 const router = express.Router();
 
+async function enrichPostsWithComments(posts) {
+    if (!posts.length) return [];
+
+    const postIds = posts.map(p => p._id);
+
+    const [allComments, commentCounts] = await Promise.all([
+        Comment.find({ post: { $in: postIds }, parent: null })
+            .populate('author', 'username displayName avatar')
+            .sort({ created_at: 1 })
+            .lean(),
+        Comment.aggregate([
+            { $match: { post: { $in: postIds } } },
+            { $group: { _id: '$post', count: { $sum: 1 } } }
+        ])
+    ]);
+
+    const countMap = {};
+    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
+
+    const commentMap = {};
+    allComments.forEach(c => {
+        const pid = c.post.toString();
+        if (!commentMap[pid]) commentMap[pid] = [];
+        if (commentMap[pid].length < 3) commentMap[pid].push(c);
+    });
+
+    return posts.map(post => ({
+        ...post,
+        comments: commentMap[post._id.toString()] || [],
+        commentCount: countMap[post._id.toString()] || 0
+    }));
+}
+
 // Profile page
 router.get('/profile', async (req, res) => {
     if (!req.session.user) return res.redirect('/login');
 
-    const user = await User.findById(req.session.user.id);
+    const user = await User.findById(req.session.user.id).lean();
     if (!user) return res.redirect('/login');
 
     const posts = await Post.find({ author: user._id })
         .populate('author', 'username displayName avatar')
-        .sort({ created_at: -1 });
+        .sort({ created_at: -1 })
+        .lean();
 
-    const postsWithComments = await Promise.all(posts.map(async (post) => {
-        const comments = await Comment.find({ post: post._id, parent: null })
-            .populate('author', 'username displayName avatar')
-            .sort({ created_at: 1 })
-            .limit(3);
-        const commentCount = await Comment.countDocuments({ post: post._id });
-        return { ...post.toObject(), comments, commentCount };
-    }));
+    const postsWithComments = await enrichPostsWithComments(posts);
 
     res.render('profile', { user: req.session.user, profileUser: user, posts: postsWithComments });
 });
@@ -54,14 +81,11 @@ router.post('/profile/delete', async (req, res) => {
     try {
         const userId = req.session.user.id;
 
-        // Delete all user's posts
-        await Post.deleteMany({ author: userId });
-
-        // Delete all user's comments
-        await Comment.deleteMany({ author: userId });
-
-        // Delete the user account
-        await User.findByIdAndDelete(userId);
+        await Promise.all([
+            Post.deleteMany({ author: userId }),
+            Comment.deleteMany({ author: userId }),
+            User.findByIdAndDelete(userId)
+        ]);
 
         // Destroy session
         req.session.destroy();
@@ -76,22 +100,16 @@ router.post('/profile/delete', async (req, res) => {
 // Get user profile by username (API)
 router.get('/api/profile/:username', async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.params.username });
+        const user = await User.findOne({ username: req.params.username }).lean();
         if (!user) return res.status(404).json({ error: 'ไม่พบผู้ใช้' });
 
         const posts = await Post.find({ author: user._id })
             .populate('author', 'username displayName avatar')
             .sort({ created_at: -1 })
-            .limit(10);
+            .limit(10)
+            .lean();
 
-        const postsWithComments = await Promise.all(posts.map(async (post) => {
-            const comments = await Comment.find({ post: post._id, parent: null })
-                .populate('author', 'username displayName avatar')
-                .sort({ created_at: 1 })
-                .limit(3);
-            const commentCount = await Comment.countDocuments({ post: post._id });
-            return { ...post.toObject(), comments, commentCount };
-        }));
+        const postsWithComments = await enrichPostsWithComments(posts);
 
         res.json({
             success: true,

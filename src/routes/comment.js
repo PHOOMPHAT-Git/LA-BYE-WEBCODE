@@ -57,26 +57,35 @@ router.post('/comment/create', async (req, res) => {
     });
 });
 
-// Like/unlike comment
+// Like/unlike comment - atomic operation
 router.post('/comment/:id/like', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
 
     const userId = req.session.user.id;
-    const comment = await Comment.findById(req.params.id);
-    if (!comment) return res.status(404).json({ error: 'ไม่พบความคิดเห็น' });
 
-    const alreadyLiked = comment.likedBy.some(id => id.toString() === userId);
+    // Try to add like
+    const addResult = await Comment.findOneAndUpdate(
+        { _id: req.params.id, likedBy: { $ne: userId } },
+        { $push: { likedBy: userId }, $inc: { likes: 1 } },
+        { new: true }
+    );
 
-    if (alreadyLiked) {
-        comment.likedBy.pull(userId);
-        comment.likes = Math.max(0, comment.likes - 1);
-    } else {
-        comment.likedBy.push(userId);
-        comment.likes = comment.likes + 1;
+    if (addResult) {
+        return res.json({ likes: addResult.likes, liked: true });
     }
 
-    await comment.save();
-    res.json({ likes: comment.likes, liked: !alreadyLiked });
+    // Already liked → remove
+    const removeResult = await Comment.findOneAndUpdate(
+        { _id: req.params.id, likedBy: userId },
+        { $pull: { likedBy: userId }, $inc: { likes: -1 } },
+        { new: true }
+    );
+
+    if (!removeResult) {
+        return res.status(404).json({ error: 'ไม่พบความคิดเห็น' });
+    }
+
+    res.json({ likes: Math.max(0, removeResult.likes), liked: false });
 });
 
 // Delete comment (and its replies)

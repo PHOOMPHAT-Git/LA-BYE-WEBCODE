@@ -13,4 +13,8 @@ const CommentSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now }
 });
 
+CommentSchema.index({ post: 1, parent: 1, created_at: 1 });
+CommentSchema.index({ parent: 1, created_at: 1 });
+CommentSchema.index({ post: 1 });
+
 module.exports = mongoose.models.Comment || mongoose.model('Comment', CommentSchema, 'comments');

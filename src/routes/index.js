@@ -6,6 +6,40 @@ const router = express.Router();
 
 const POSTS_PER_PAGE = 10;
 
+async function enrichPostsWithComments(posts) {
+    if (!posts.length) return [];
+
+    const postIds = posts.map(p => p._id);
+
+    // Run comments and counts in parallel
+    const [allComments, commentCounts] = await Promise.all([
+        Comment.find({ post: { $in: postIds }, parent: null })
+            .populate('author', 'username displayName avatar')
+            .sort({ created_at: 1 })
+            .lean(),
+        Comment.aggregate([
+            { $match: { post: { $in: postIds } } },
+            { $group: { _id: '$post', count: { $sum: 1 } } }
+        ])
+    ]);
+
+    const countMap = {};
+    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
+
+    const commentMap = {};
+    allComments.forEach(c => {
+        const pid = c.post.toString();
+        if (!commentMap[pid]) commentMap[pid] = [];
+        if (commentMap[pid].length < 3) commentMap[pid].push(c);
+    });
+
+    return posts.map(post => ({
+        ...post,
+        comments: commentMap[post._id.toString()] || [],
+        commentCount: countMap[post._id.toString()] || 0
+    }));
+}
+
 // Feed page
 router.get('/', async (req, res) => {
     const posts = await Post.find()
@@ -14,36 +48,7 @@ router.get('/', async (req, res) => {
         .limit(POSTS_PER_PAGE)
         .lean();
 
-    const postIds = posts.map(p => p._id);
-
-    // Batch: get all top-level comments for these posts (limit 3 per post)
-    const allComments = await Comment.find({ post: { $in: postIds }, parent: null })
-        .populate('author', 'username displayName avatar')
-        .sort({ created_at: 1 })
-        .lean();
-
-    // Batch: get comment counts
-    const commentCounts = await Comment.aggregate([
-        { $match: { post: { $in: postIds } } },
-        { $group: { _id: '$post', count: { $sum: 1 } } }
-    ]);
-    const countMap = {};
-    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
-
-    // Map comments to posts (limit 3 per post)
-    const commentMap = {};
-    allComments.forEach(c => {
-        const pid = c.post.toString();
-        if (!commentMap[pid]) commentMap[pid] = [];
-        if (commentMap[pid].length < 3) commentMap[pid].push(c);
-    });
-
-    const postsWithComments = posts.map(post => ({
-        ...post,
-        comments: commentMap[post._id.toString()] || [],
-        commentCount: countMap[post._id.toString()] || 0
-    }));
-
+    const postsWithComments = await enrichPostsWithComments(posts);
     const hasMore = posts.length === POSTS_PER_PAGE;
 
     // API request for load more
@@ -66,33 +71,7 @@ router.get('/api/posts', async (req, res) => {
         .limit(POSTS_PER_PAGE)
         .lean();
 
-    const postIds = posts.map(p => p._id);
-
-    const allComments = await Comment.find({ post: { $in: postIds }, parent: null })
-        .populate('author', 'username displayName avatar')
-        .sort({ created_at: 1 })
-        .lean();
-
-    const commentCounts = await Comment.aggregate([
-        { $match: { post: { $in: postIds } } },
-        { $group: { _id: '$post', count: { $sum: 1 } } }
-    ]);
-    const countMap = {};
-    commentCounts.forEach(c => { countMap[c._id.toString()] = c.count; });
-
-    const commentMap = {};
-    allComments.forEach(c => {
-        const pid = c.post.toString();
-        if (!commentMap[pid]) commentMap[pid] = [];
-        if (commentMap[pid].length < 3) commentMap[pid].push(c);
-    });
-
-    const postsWithComments = posts.map(post => ({
-        ...post,
-        comments: commentMap[post._id.toString()] || [],
-        commentCount: countMap[post._id.toString()] || 0
-    }));
-
+    const postsWithComments = await enrichPostsWithComments(posts);
     const hasMore = posts.length === POSTS_PER_PAGE;
     res.json({ posts: postsWithComments, hasMore });
 });
@@ -133,8 +112,10 @@ router.post('/post/:id/delete', async (req, res) => {
         return res.status(403).json({ error: 'ไม่มีสิทธิ์ลบโพสต์นี้' });
     }
 
-    await Comment.deleteMany({ post: post._id });
-    await Post.findByIdAndDelete(req.params.id);
+    await Promise.all([
+        Comment.deleteMany({ post: post._id }),
+        Post.findByIdAndDelete(req.params.id)
+    ]);
     res.json({ success: true });
 });
 
@@ -156,26 +137,35 @@ router.post('/post/:id/edit', async (req, res) => {
     res.json({ success: true });
 });
 
-// Like/unlike post
+// Like/unlike post - atomic operation
 router.post('/post/:id/like', async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
 
     const userId = req.session.user.id;
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ error: 'ไม่พบโพสต์' });
 
-    const alreadyLiked = post.likedBy.some(id => id.toString() === userId);
+    // Try to add like (if not already liked)
+    const addResult = await Post.findOneAndUpdate(
+        { _id: req.params.id, likedBy: { $ne: userId } },
+        { $push: { likedBy: userId }, $inc: { likes: 1 } },
+        { new: true }
+    );
 
-    if (alreadyLiked) {
-        post.likedBy.pull(userId);
-        post.likes = Math.max(0, post.likes - 1);
-    } else {
-        post.likedBy.push(userId);
-        post.likes = post.likes + 1;
+    if (addResult) {
+        return res.json({ likes: addResult.likes, liked: true });
     }
 
-    await post.save();
-    res.json({ likes: post.likes, liked: !alreadyLiked });
+    // Already liked → remove like
+    const removeResult = await Post.findOneAndUpdate(
+        { _id: req.params.id, likedBy: userId },
+        { $pull: { likedBy: userId }, $inc: { likes: -1 } },
+        { new: true }
+    );
+
+    if (!removeResult) {
+        return res.status(404).json({ error: 'ไม่พบโพสต์' });
+    }
+
+    res.json({ likes: Math.max(0, removeResult.likes), liked: false });
 });
 
 module.exports = router;
