@@ -1257,9 +1257,18 @@ a {
     justify-content: center;
     padding: 48px 20px;
     color: #65676b;
-    font-size: 14px;
+    text-align: center;
     flex: 1;
     min-height: 250px;
+}
+
+.modal-loading svg {
+    margin-bottom: 4px;
+}
+
+.modal-loading p {
+    font-size: 15px;
+    margin-top: 8px;
 }
 
 .modal-empty {

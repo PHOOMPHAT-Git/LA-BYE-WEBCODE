@@ -704,7 +704,7 @@
         function loadAllComments(postId, sortType) {
             var sort = sortType || 'oldest';
             var list = document.getElementById('comments-list-' + postId);
-            list.innerHTML = '<div class="modal-loading" style="padding:20px 0"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="loading-spinner" style="margin-top:14px"></div><p>กำลังโหลดความคิดเห็น...</p></div>';
+            list.innerHTML = '<div class="modal-loading"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="loading-spinner"></div><p>กำลังโหลดความคิดเห็น...</p></div>';
             fetch('/comments/' + postId + '?sort=' + sort)
             .then(function(res) { return res.json(); })
             .then(function(data) {
@@ -936,7 +936,7 @@
                 } else {
                     bodyHtml += '<div class="modal-loading">';
                     bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-                    bodyHtml += '<div class="loading-spinner" style="margin-top:14px"></div>';
+                    bodyHtml += '<div class="loading-spinner"></div>';
                     bodyHtml += '<p>กำลังโหลดความคิดเห็น...</p>';
                     bodyHtml += '</div>';
                 }
