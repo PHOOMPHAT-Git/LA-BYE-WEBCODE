@@ -950,7 +950,8 @@
                 postId: postId,
                 commentId: null,
                 parentCommentId: null,
-                data: null,
+                data: [],
+                loading: true,
                 title: 'ความคิดเห็นทั้งหมด',
                 sortType: 'oldest'
             });
@@ -964,6 +965,7 @@
                 .then(function(data) {
                     var current = commentModalStack.getCurrent();
                     current.data = data.comments;
+                    current.loading = false;
                     renderCommentModal(false, false);
                 })
                 .catch(function(err) {
@@ -989,7 +991,8 @@
                 postId: postId,
                 commentId: commentId,
                 parentCommentId: commentId,
-                data: null,
+                data: [],
+                loading: true,
                 title: 'การตอบกลับ',
                 sortType: null
             });
@@ -1003,6 +1006,7 @@
                 .then(function(data) {
                     var current = commentModalStack.getCurrent();
                     current.data = data.replies;
+                    current.loading = false;
                     renderCommentModal(false, false);
                 })
                 .catch(function(err) {
@@ -1113,19 +1117,17 @@
                 bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
                 bodyHtml += '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
                 bodyHtml += '</div>';
+            } else if (current.loading) {
+                bodyHtml += '<div class="modal-loading">';
+                bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+                bodyHtml += '<div class="loading-spinner"></div>';
+                bodyHtml += '<p>กำลังโหลดความคิดเห็น...</p>';
+                bodyHtml += '</div>';
             } else if (!current.data || current.data.length === 0) {
-                if (current.data) {
-                    bodyHtml += '<div class="modal-empty">';
-                    bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-                    bodyHtml += '<p>' + (level === 0 ? 'ยังไม่มีความคิดเห็น' : 'ยังไม่มีการตอบกลับ') + '</p>';
-                    bodyHtml += '</div>';
-                } else {
-                    bodyHtml += '<div class="modal-loading">';
-                    bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-                    bodyHtml += '<div class="loading-spinner"></div>';
-                    bodyHtml += '<p>กำลังโหลดความคิดเห็น...</p>';
-                    bodyHtml += '</div>';
-                }
+                bodyHtml += '<div class="modal-empty">';
+                bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+                bodyHtml += '<p>' + (level === 0 ? 'ยังไม่มีความคิดเห็น' : 'ยังไม่มีการตอบกลับ') + '</p>';
+                bodyHtml += '</div>';
             } else {
                 bodyHtml += '<div class="modal-comments-list">';
                 current.data.forEach(function(comment) {
