@@ -325,7 +325,7 @@
         };
 
         // Page load fade
-        document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
             document.body.classList.remove('loaded');
             setTimeout(function() {
                 document.body.classList.add('loaded');
@@ -775,7 +775,7 @@
                 postId: postId,
                 commentId: null,
                 parentCommentId: null,
-                data: [],
+                data: null,
                 title: 'ความคิดเห็นทั้งหมด',
                 sortType: 'oldest'
             });
@@ -814,7 +814,7 @@
                 postId: postId,
                 commentId: commentId,
                 parentCommentId: commentId,
-                data: [],
+                data: null,
                 title: 'การตอบกลับ',
                 sortType: null
             });
