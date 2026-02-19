@@ -10,12 +10,6 @@
 </head>
 <body>
 
-    <!-- Page Loader -->
-    <div class="page-loader" id="pageLoader">
-        <div class="page-loader-spinner"></div>
-        <div class="page-loader-text">กำลังโหลด...</div>
-    </div>
-
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-content">
@@ -325,15 +319,10 @@
         };
 
         // Page load fade
-        window.addEventListener('load', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.remove('loaded');
             setTimeout(function() {
                 document.body.classList.add('loaded');
-                var loader = document.getElementById('pageLoader');
-                if (loader) {
-                    loader.classList.add('hide');
-                    setTimeout(function() { loader.remove(); }, 400);
-                }
             }, 10);
         });
 
@@ -715,7 +704,7 @@
         function loadAllComments(postId, sortType) {
             var sort = sortType || 'oldest';
             var list = document.getElementById('comments-list-' + postId);
-            list.innerHTML = '<div class="modal-loading" style="padding:20px 0"><div class="loading-spinner"></div><p>กำลังโหลดความคิดเห็น...</p></div>';
+            list.innerHTML = '<div class="modal-loading" style="padding:20px 0"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="loading-spinner" style="margin-top:14px"></div><p>กำลังโหลดความคิดเห็น...</p></div>';
             fetch('/comments/' + postId + '?sort=' + sort)
             .then(function(res) { return res.json(); })
             .then(function(data) {
@@ -946,7 +935,8 @@
                     bodyHtml += '</div>';
                 } else {
                     bodyHtml += '<div class="modal-loading">';
-                    bodyHtml += '<div class="loading-spinner"></div>';
+                    bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+                    bodyHtml += '<div class="loading-spinner" style="margin-top:14px"></div>';
                     bodyHtml += '<p>กำลังโหลดความคิดเห็น...</p>';
                     bodyHtml += '</div>';
                 }
