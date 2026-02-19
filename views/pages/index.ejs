@@ -1118,10 +1118,9 @@
                 bodyHtml += '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
                 bodyHtml += '</div>';
             } else if (current.loading) {
-                bodyHtml += '<div class="modal-loading">';
+                bodyHtml += '<div class="modal-empty">';
                 bodyHtml += '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-                bodyHtml += '<div class="loading-spinner"></div>';
-                bodyHtml += '<p>โหลดความคิดเห็น</p>';
+                bodyHtml += '<p>กำลังโหลดความคิดเห็น</p>';
                 bodyHtml += '</div>';
             } else if (!current.data || current.data.length === 0) {
                 bodyHtml += '<div class="modal-empty">';
